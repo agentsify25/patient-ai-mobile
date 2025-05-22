@@ -29,9 +29,9 @@ const fetchLatestVitals = async (userId: string | undefined): Promise<VitalReadi
     .eq('profile_id', userId)
     .order('timestamp', { ascending: false })
     .limit(1)
-    .single(); // Fetches the single latest record
+    .single(); 
 
-  if (error && error.code !== 'PGRST116') { // PGRST116: " exactement une ligne (ou aucune) ..." (single row expected, 0 returned is not an error for .single())
+  if (error && error.code !== 'PGRST116') { 
     console.error('Error fetching latest vitals:', error);
     throw new Error(error.message);
   }
@@ -86,7 +86,7 @@ const Health = () => {
         value: String(vitals.spo2),
         unit: '%',
         trend: 'stable' as const,
-        icon: Droplets, // Using Droplets for SpO2
+        icon: Droplets, 
         lastUpdated,
       });
     }
@@ -106,7 +106,7 @@ const Health = () => {
         value: String(vitals.respiratory_rate),
         unit: 'br/min',
         trend: 'stable' as const,
-        icon: Wind, // Using Wind for Respiratory Rate
+        icon: Wind, 
         lastUpdated,
       });
     }
@@ -156,7 +156,7 @@ const Health = () => {
           <Button 
             className="w-full flex items-center justify-center gap-2" 
             size="lg"
-            onClick={() => navigate('/log-vitals')}
+            onClick={() => navigate('/log-new-vitals')} // Updated navigation
           >
             <PlusCircle size={20} />
             Take New Reading
@@ -173,7 +173,7 @@ const Health = () => {
             variant="outline" 
             className="w-full flex items-center justify-center gap-2" 
             size="lg" 
-            onClick={() => navigate('/select-test')} // Updated onClick
+            onClick={() => navigate('/select-test')} 
           >
             <Smartphone size={20} />
             Connect Device & Test

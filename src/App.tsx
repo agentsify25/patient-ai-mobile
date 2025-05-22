@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,9 +9,8 @@ import Appointments from "./pages/Appointments";
 // import Messages from "./pages/Messages"; // Messages icon was replaced by Settings
 import Profile from "./pages/Profile";
 import SettingsPage from "./pages/SettingsPage"; // Import new SettingsPage
-import NotFound from "./pages/NotFound";
-import AuthPage from "./pages/AuthPage";
-import LogVitalsPage from "./pages/LogVitalsPage";
+import VitalSignsHistoryPage from "./pages/VitalSignsHistoryPage"; // New import
+import LogNewVitalsPage from "./pages/LogNewVitalsPage"; // New import for the form
 import SelectTestPage from "./pages/SelectTestPage";
 import BloodOxygenPage from "./pages/BloodOxygenPage";
 import BloodPressurePage from "./pages/BloodPressurePage";
@@ -65,7 +63,9 @@ const AppRoutes = () => {
         {/* <Route path="/messages" element={<Messages />} /> */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<SettingsPage />} /> {/* Add route for SettingsPage */}
-        <Route path="/log-vitals" element={<LogVitalsPage />} />
+        {/* <Route path="/log-vitals" element={<LogVitalsPage />} /> */}
+        <Route path="/vital-history" element={<VitalSignsHistoryPage />} /> {/* New route for history */}
+        <Route path="/log-new-vitals" element={<LogNewVitalsPage />} /> {/* New route for form */}
         <Route path="/select-test" element={<SelectTestPage />} />
         <Route path="/blood-oxygen" element={<BloodOxygenPage />} />
         <Route path="/blood-pressure" element={<BloodPressurePage />} />

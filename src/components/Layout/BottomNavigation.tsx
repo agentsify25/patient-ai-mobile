@@ -1,15 +1,14 @@
-
-import { Home, Activity, Calendar, MessageCircle, ClipboardPlus, Settings } from 'lucide-react'; // Added Settings
+import { Home, Activity, Calendar, Settings, LineChart, History } from 'lucide-react'; // Added LineChart, History
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const navigationItems = [
   { icon: Home, label: 'Home', path: '/' },
   { icon: Activity, label: 'Health', path: '/health' },
-  { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' },
+  // { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' }, // Old item
+  { icon: LineChart, label: 'History', path: '/vital-history' }, // New item for History
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
-  // { icon: MessageCircle, label: 'Messages', path: '/messages' }, // Original messages item
-  { icon: Settings, label: 'Settings', path: '/settings' }, // Added Settings
+  { icon: Settings, label: 'Settings', path: '/settings' }, 
 ];
 
 export const BottomNavigation = () => {
@@ -38,6 +37,8 @@ export const BottomNavigation = () => {
               style={{ minWidth: '0' }} 
             >
               <Icon size={28} />
+              {/* Optional: Add text label if desired, though current design is icon-only for active path */}
+              {/* <span className={`text-xs mt-1 ${isActive ? 'text-primary' : 'text-muted-foreground'}`}>{item.label}</span> */}
             </Button>
           );
         })}
