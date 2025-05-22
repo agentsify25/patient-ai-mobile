@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MobileLayout } from "@/components/Layout/MobileLayout";
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
@@ -115,7 +116,7 @@ const VitalSignsHistoryPage = () => {
   const { data: vitalHistory, isLoading, error } = useQuery<VitalReadingFromDB[], Error>({
     queryKey: ['vitalHistory', user?.id],
     queryFn: () => fetchVitalHistory(user?.id),
-    enabled: !!user?.id,
+    // enabled: !!user?.id, // Removed this line to always enable the query
   });
 
   const processedData = React.useMemo(() => {
