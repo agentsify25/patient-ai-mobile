@@ -18,7 +18,7 @@ const Index = () => {
         {/* Greeting Header */}
         <div className="text-center py-4">
           <h1 className="text-2xl font-light text-muted-foreground mb-2">{greeting},</h1>
-          <h2 className="text-3xl font-bold">Alex</h2>
+          <h2 className="text-3xl font-bold">Alex</h2> {/* TODO: Make name dynamic */}
         </div>
 
         {/* Health Insights Card */}
@@ -36,13 +36,13 @@ const Index = () => {
               title="New Reading"
               icon={Plus}
               gradient="gradient-health"
-              onClick={() => navigate('/health')}
+              onClick={() => navigate('/log-vitals')} // Updated navigation
             />
             <QuickActionCard
               title="View Trends"
               icon={BarChart3}
               gradient="gradient-success"
-              onClick={() => navigate('/health')}
+              onClick={() => navigate('/health')} // Stays as /health for now to see overall dashboard
             />
           </div>
         </div>
@@ -60,6 +60,7 @@ const Index = () => {
           </div>
           
           <div className="space-y-3">
+            {/* These are still static, can be updated later */}
             <MeasurementCard
               title="Blood Pressure"
               value="121/77"
