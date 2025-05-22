@@ -16,6 +16,8 @@ import BloodOxygenPage from "./pages/BloodOxygenPage";
 import BloodPressurePage from "./pages/BloodPressurePage";
 import TemperaturePage from "./pages/TemperaturePage";
 import ECGPage from "./pages/ECGPage";
+import HeartRatePage from "./pages/HeartRatePage";
+import BloodGlucosePage from "./pages/BloodGlucosePage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 
@@ -66,6 +68,8 @@ const AppRoutes = () => {
         <Route path="/blood-pressure" element={<BloodPressurePage />} />
         <Route path="/temperature" element={<TemperaturePage />} />
         <Route path="/ecg" element={<ECGPage />} />
+        <Route path="/heart-rate" element={<HeartRatePage />} />
+        <Route path="/blood-glucose" element={<BloodGlucosePage />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />

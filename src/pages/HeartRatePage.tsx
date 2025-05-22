@@ -4,10 +4,10 @@ import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
-import { Droplets, Loader2, PlayCircle, Heart } from 'lucide-react'; // Keep Heart for potential future use or if API returns it anyway
+import { Heart, Loader2, PlayCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
-const BloodOxygenPage = () => {
+const HeartRatePage = () => {
   const [vitals, setVitals] = useState<LinktopVitalsData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,10 +15,15 @@ const BloodOxygenPage = () => {
     setIsLoading(true);
     setVitals(null);
     try {
-      const data = await connectToLinktop();
+      // connectToLinktop typically reads multiple vitals including HR
+      const data = await connectToLinktop(); 
       if (data) {
         setVitals(data);
-        toast.success('Blood Oxygen reading complete.');
+        if (data.heartRate !== undefined) {
+            toast.success('Heart Rate reading complete.');
+        } else {
+            toast.info('Heart Rate data not available from this reading.');
+        }
       }
     } catch (error: any) {
       toast.error('Failed to connect or read data.', { description: error.message });
@@ -28,11 +33,11 @@ const BloodOxygenPage = () => {
   };
 
   return (
-    <MobileLayout title="Blood Oxygen (SpO2)">
+    <MobileLayout title="Heart Rate">
       <div className="space-y-6">
         <Card className="text-center">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Blood Oxygen (SpO2)</CardTitle>
+            <CardTitle className="text-2xl font-bold">Heart Rate (BPM)</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {isLoading && (
@@ -42,35 +47,21 @@ const BloodOxygenPage = () => {
               </div>
             )}
             {!isLoading && vitals && (
-              <div className="space-y-4">
-                <Card className="p-6">
-                  <div className="flex items-center justify-center text-primary mb-2">
-                    <Droplets size={48} />
-                  </div>
-                  <p className="text-sm text-muted-foreground">Blood Oxygen (SpO2)</p>
-                  <p className="text-5xl font-bold">
-                    {vitals.spo2 !== undefined ? `${vitals.spo2}%` : 'N/A'}
-                  </p>
-                </Card>
-                {/* Display Heart Rate if available from the same reading, but primary focus is SpO2 */}
-                {vitals.heartRate !== undefined && (
-                    <Card className="p-4 bg-muted/30">
-                        <div className="flex items-center justify-center text-pink-500 mb-1">
-                            <Heart size={24} />
-                        </div>
-                        <p className="text-xs text-muted-foreground">Heart Rate (during SpO2 test)</p>
-                        <p className="text-2xl font-semibold">
-                            {`${vitals.heartRate} bpm`}
-                        </p>
-                    </Card>
-                )}
-                 {vitals.batteryLevel !== undefined && (
+              <div className="p-6">
+                <div className="flex items-center justify-center text-pink-500 mb-2">
+                  <Heart size={48} />
+                </div>
+                <p className="text-sm text-muted-foreground">Heart Rate</p>
+                <p className="text-5xl font-bold">
+                  {vitals.heartRate !== undefined ? `${vitals.heartRate} bpm` : 'N/A'}
+                </p>
+                {vitals.batteryLevel !== undefined && (
                   <p className="text-sm text-muted-foreground mt-2">Device Battery: {vitals.batteryLevel}%</p>
                 )}
               </div>
             )}
-            {!isLoading && !vitals && (
-              <p className="text-muted-foreground py-8">Press "Start Test" to measure your blood oxygen.</p>
+             {!isLoading && !vitals && (
+              <p className="text-muted-foreground py-8">Press "Start Test" to measure your heart rate.</p>
             )}
             <Button onClick={handleStartTest} disabled={isLoading} size="lg" className="w-full">
               {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <PlayCircle className="mr-2 h-5 w-5" />}
@@ -83,4 +74,4 @@ const BloodOxygenPage = () => {
   );
 };
 
-export default BloodOxygenPage;
+export default HeartRatePage;
