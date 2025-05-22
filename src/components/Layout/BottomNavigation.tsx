@@ -1,5 +1,5 @@
 
-import { Home, Activity, Calendar, MessageCircle, User, ClipboardPlus } from 'lucide-react';
+import { Home, Activity, Calendar, MessageCircle, ClipboardPlus } from 'lucide-react'; // Removed User import
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -9,7 +9,7 @@ const navigationItems = [
   { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' },
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
   { icon: MessageCircle, label: 'Messages', path: '/messages' },
-  { icon: User, label: 'Profile', path: '/profile' },
+  // { icon: User, label: 'Profile', path: '/profile' }, // Removed Profile item
 ];
 
 export const BottomNavigation = () => {
@@ -29,7 +29,7 @@ export const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors whitespace-normal ${ // Added whitespace-normal
+              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors whitespace-normal ${
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -45,4 +45,3 @@ export const BottomNavigation = () => {
     </div>
   );
 };
-
