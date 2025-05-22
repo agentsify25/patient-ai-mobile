@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
@@ -95,13 +94,13 @@ const TemperaturePage = () => {
           <Button
             onClick={handleStartTest}
             disabled={isLoading}
-            className="rounded-full w-28 h-28 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
+            className="rounded-full w-24 h-24 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
             aria-label="Start Test"
           >
             {isLoading ? (
-              <Loader2 className="h-10 w-10 animate-spin" />
+              <Loader2 className="h-8 w-8 animate-spin" />
             ) : (
-              <span className="font-bold tracking-wider text-lg">START</span>
+              <span className="font-bold tracking-wider text-base">START</span>
             )}
           </Button>
         </div>

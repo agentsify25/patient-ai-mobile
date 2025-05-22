@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
@@ -48,21 +47,19 @@ const ECGPage = () => {
   const ecgMetrics = [
     { label: "RRI max", value: formatMetric(vitals?.ecg?.rriMax, "ms", "0 ms") },
     { label: "RRI min", value: formatMetric(vitals?.ecg?.rriMin, "ms", "0 ms") },
-    { label: "Avg HR", value: formatMetric(vitals?.heartRate, "BPM", "0 BPM") }, // Mockup uses 0 BPM
-    { label: "HRV", value: formatMetric(vitals?.ecg?.hrv, "", "0") }, // Mockup uses 0
+    { label: "Avg HR", value: formatMetric(vitals?.heartRate, "BPM", "0 BPM") },
+    { label: "HRV", value: formatMetric(vitals?.ecg?.hrv, "", "0") },
     { label: "Mood", value: vitals?.ecg?.mood ?? "-" },
-    { label: "Resp Rate", value: formatMetric(vitals?.ecg?.respiratoryRate, "BPM", "0 BPM") }, // Mockup uses 0 BPM
+    { label: "Resp Rate", value: formatMetric(vitals?.ecg?.respiratoryRate, "BPM", "0 BPM") },
   ];
 
-  // Style for ECG grid background
   const ecgGridStyle = {
     backgroundImage: `
       linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px),
       linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px)
     `,
-    backgroundSize: '15px 15px', // Adjust grid size as needed
+    backgroundSize: '15px 15px',
   };
-
 
   return (
     <MobileLayout title="ECG" headerLeft={headerLeft} headerRight={headerRight}>
@@ -75,7 +72,7 @@ const ECGPage = () => {
             </div>
           )}
 
-          {(!isLoading || vitals) && ( // Show content if not loading OR if vitals are present
+          {(!isLoading || vitals) && ( 
             <>
               <div className="w-full flex justify-end space-x-4 text-xs text-muted-foreground mb-1 pr-1">
                 {ecgParameters.map(param => (
@@ -86,10 +83,10 @@ const ECGPage = () => {
                 ))}
               </div>
               <div 
-                className="bg-card w-full aspect-[2/1] max-w-md rounded-md" // Use bg-card or a darker tone
+                className="bg-card w-full aspect-[2/1] max-w-md rounded-md"
                 style={ecgGridStyle}
               >
-                {(!vitals || !vitals.ecg) && !isLoading && ( // Show placeholder if no ECG data specifically
+                {(!vitals || !vitals.ecg) && !isLoading && ( 
                   <div className="flex items-center justify-center h-full">
                     <p className="text-muted-foreground text-sm">ECG Graph Area</p>
                   </div>
@@ -113,18 +110,17 @@ const ECGPage = () => {
              <p className="text-muted-foreground mt-8 text-center text-sm">Press START to attempt an ECG reading.</p>
           )}
         </div>
-
         <div className="w-full flex justify-center pt-6 mt-auto">
           <Button
             onClick={handleStartTest}
             disabled={isLoading}
-            className="rounded-full w-28 h-28 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
+            className="rounded-full w-24 h-24 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
             aria-label="Start Test"
           >
             {isLoading ? (
-              <Loader2 className="h-10 w-10 animate-spin" />
+              <Loader2 className="h-8 w-8 animate-spin" />
             ) : (
-              <span className="font-bold tracking-wider text-lg">START</span>
+              <span className="font-bold tracking-wider text-base">START</span>
             )}
           </Button>
         </div>

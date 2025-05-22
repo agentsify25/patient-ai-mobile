@@ -1,11 +1,9 @@
-
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
 import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
-import { Loader2, Heart, Droplet } from 'lucide-react'; // Added Droplet
+import { Loader2, Heart, Droplet } from 'lucide-react'; 
 import { toast } from 'sonner';
-// BloodPressureDisplay component is read-only and not circular, so we will construct UI manually
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
 
 const BloodPressurePage = () => {
@@ -48,11 +46,8 @@ const BloodPressurePage = () => {
             </div>
           )}
           
-          {/* Custom Blood Pressure Display to match mockup */}
           <div className="relative flex flex-col items-center justify-center w-[220px] h-[220px]">
-            {/* Outer circle (decorative) */}
             <div className="absolute inset-0 rounded-full border-[16px] border-yellow-400 opacity-30"></div>
-            {/* Inner content */}
             <div className="relative z-10 flex flex-col items-center">
               <div className="flex items-center justify-center space-x-2">
                 <span className="text-6xl font-bold text-foreground">{systolic}</span>
@@ -67,8 +62,7 @@ const BloodPressurePage = () => {
             </div>
           </div>
           
-          {/* Secondary HR display */}
-           <div className="mt-6 text-center">
+          <div className="mt-6 text-center">
             <span className="text-4xl font-semibold">
               {isLoading && !vitals ? '0' : (vitals?.heartRate ?? '0')}
             </span>
@@ -76,7 +70,6 @@ const BloodPressurePage = () => {
             <span className="text-muted-foreground ml-1">BPM</span>
           </div>
 
-          {/* Labels and dashed lines */}
           <div className="mt-6 flex flex-col items-center">
             <div className="grid grid-cols-2 gap-x-8 text-center">
                  <div>
@@ -102,24 +95,23 @@ const BloodPressurePage = () => {
            {!isLoading && !vitals && (
              <p className="text-muted-foreground mt-8 text-center text-sm">Press START to measure blood pressure.</p>
           )}
-           {vitals && (systolic === '0' || diastolic === '0') && !isLoading && systolic !== '--' && ( // Check for actual '0' after loading
+           {vitals && (systolic === '0' || diastolic === '0') && !isLoading && systolic !== '--' && (
             <p className="text-muted-foreground mt-4 text-center text-xs">
               Blood pressure data not available or zero.
             </p>
           )}
         </div>
-
         <div className="w-full flex justify-center pt-6 mt-auto">
           <Button
             onClick={handleStartTest}
             disabled={isLoading}
-            className="rounded-full w-28 h-28 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
+            className="rounded-full w-24 h-24 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
             aria-label="Start Test"
           >
             {isLoading ? (
-              <Loader2 className="h-10 w-10 animate-spin" />
+              <Loader2 className="h-8 w-8 animate-spin" />
             ) : (
-              <span className="font-bold tracking-wider text-lg">START</span>
+              <span className="font-bold tracking-wider text-base">START</span>
             )}
           </Button>
         </div>

@@ -13,6 +13,7 @@ interface CircularProgressDisplayProps {
   unitFontSize?: string;
   size?: number;
   isLoading?: boolean;
+  showLabel?: boolean; // Added this prop
 }
 
 export const CircularProgressDisplay: React.FC<CircularProgressDisplayProps> = ({
@@ -26,6 +27,7 @@ export const CircularProgressDisplay: React.FC<CircularProgressDisplayProps> = (
   unitFontSize = 'text-lg',
   size = 200,
   isLoading = false,
+  showLabel = true, // Default to true if not provided
 }) => {
   const validValue = (value !== null && value !== undefined && !isNaN(value)) ? value : 0;
   const displayValue = (value !== null && value !== undefined && !isNaN(value)) ? value : null;
@@ -63,7 +65,8 @@ export const CircularProgressDisplay: React.FC<CircularProgressDisplayProps> = (
           <span className={`${unitFontSize} text-muted-foreground`}>{isLoading ? '' : unit}</span>
         </div>
       </div>
-      <p className={`${labelFontSize} text-muted-foreground mt-3 font-medium`}>{label}</p>
+      {showLabel && <p className={`${labelFontSize} text-muted-foreground mt-3 font-medium`}>{label}</p>}
     </div>
   );
 };
+

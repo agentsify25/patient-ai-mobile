@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
@@ -31,7 +30,7 @@ const BloodOxygenPage = () => {
 
   return (
     <MobileLayout title="Blood Oxygen" headerLeft={headerLeft} headerRight={headerRight}>
-      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem)]"> {/* Adjusted min-height for content spacing */}
+      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem)]">
         <div className="flex-grow flex flex-col items-center justify-center w-full">
           {isLoading && !vitals && (
             <div className="flex flex-col items-center justify-center py-8">
@@ -42,15 +41,15 @@ const BloodOxygenPage = () => {
 
           {!isLoading && !vitals && (
             <CircularProgressDisplay
-              value={null} // Initially 0 as per mockup
+              value={null} 
               maxValue={100}
               unit="%"
-              label="SpO2" // Label removed from inside circle in mockup
-              color="#00A9DE" // Cyan
-              valueFontSize="text-6xl" // Mockup seems to have a large value
-              size={220} // Mockup size
-              isLoading={true} // Shows '--' or 0 initially
-              showLabel={false} // Mockup does not have label inside circle
+              label="SpO2" 
+              color="#00A9DE" 
+              valueFontSize="text-6xl" 
+              size={220} 
+              isLoading={true} 
+              showLabel={false} 
             />
           )}
           
@@ -96,22 +95,21 @@ const BloodOxygenPage = () => {
             <p className="text-xs text-muted-foreground mt-4">Device Battery: {vitals.batteryLevel}%</p>
           )}
 
-          {!isLoading && !vitals && !isLoading && (
+          {!isLoading && !vitals && (
              <p className="text-muted-foreground mt-8 text-center text-sm">Press START to measure your blood oxygen.</p>
           )}
         </div>
-
         <div className="w-full flex justify-center pt-6 mt-auto">
           <Button
             onClick={handleStartTest}
             disabled={isLoading}
-            className="rounded-full w-28 h-28 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50" // Slightly smaller to match mockup proportions
+            className="rounded-full w-24 h-24 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
             aria-label="Start Test"
           >
             {isLoading ? (
-              <Loader2 className="h-10 w-10 animate-spin" />
+              <Loader2 className="h-8 w-8 animate-spin" />
             ) : (
-              <span className="font-bold tracking-wider text-lg">START</span>
+              <span className="font-bold tracking-wider text-base">START</span>
             )}
           </Button>
         </div>
