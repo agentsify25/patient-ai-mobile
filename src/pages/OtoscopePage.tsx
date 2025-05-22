@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Camera } from 'lucide-react'; // Added Camera
 import { toast } from 'sonner';
-import { CircularProgressDisplay } from '@/components/Dashboard/CircularProgressDisplay';
+// Removed CircularProgressDisplay import
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
 
 const OtoscopePage = () => {
@@ -26,25 +26,24 @@ const OtoscopePage = () => {
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />
-              <p className="text-muted-foreground text-lg">Processing...</p>
+              <p className="text-muted-foreground text-lg">Examining...</p>
             </div>
           )}
 
           {!isLoading && (
-             <CircularProgressDisplay
-              value={null} // No actual value
-              maxValue={100} // Placeholder max value
-              unit="" // No unit
-              label="Otoscope Examination"
-              color="#008080" // Teal color for placeholder
-              valueFontSize="text-4xl"
-              size={200} // Adjusted size
-              isLoading={true} // Shows as "waiting"
-            />
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="w-48 h-36 md:w-64 md:h-48 bg-muted rounded-lg flex items-center justify-center mb-6 shadow-inner overflow-hidden">
+                <Camera className="h-16 w-16 md:h-20 md:w-20 text-muted-foreground/50" strokeWidth={1.5} />
+              </div>
+              <p className="text-xl md:text-2xl font-semibold text-foreground mb-2">Ear Examination</p>
+              <p className="text-muted-foreground text-base">Ready to view ear canal</p>
+            </div>
           )}
           
           {!isLoading && (
-             <p className="text-muted-foreground mt-8 text-center text-sm">Press START to use the otoscope. (Feature upcoming)</p>
+             <p className="text-muted-foreground mt-8 text-center text-sm px-6">
+               Press START to use the otoscope. (Feature upcoming)
+            </p>
           )}
         </div>
 

@@ -2,11 +2,10 @@
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mic2 } from 'lucide-react'; // Added Mic2
 import { toast } from 'sonner';
-import { CircularProgressDisplay } from '@/components/Dashboard/CircularProgressDisplay';
+// Removed CircularProgressDisplay import
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
-// import { LinktopVitalsData } from '@/services/linktopBLEService'; // Not needed for placeholder
 
 const StethoscopePage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,25 +26,22 @@ const StethoscopePage = () => {
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />
-              <p className="text-muted-foreground text-lg">Processing...</p>
+              <p className="text-muted-foreground text-lg">Listening...</p>
             </div>
           )}
 
           {!isLoading && (
-            <CircularProgressDisplay
-              value={null} // No actual value
-              maxValue={100} // Placeholder max value
-              unit="" // No unit
-              label="Stethoscope Auscultation"
-              color="#888888" // Gray color for placeholder
-              valueFontSize="text-4xl"
-              size={200} // Adjusted size
-              isLoading={true} // Shows as "waiting"
-            />
+            <div className="flex flex-col items-center text-center p-6">
+              <Mic2 className="h-20 w-20 md:h-24 md:w-24 text-primary mb-6" strokeWidth={1.5} />
+              <p className="text-xl md:text-2xl font-semibold text-foreground mb-2">Auscultation</p>
+              <p className="text-muted-foreground text-base">Ready to listen for body sounds</p>
+            </div>
           )}
           
           {!isLoading && (
-             <p className="text-muted-foreground mt-8 text-center text-sm">Press START to use the stethoscope. (Feature upcoming)</p>
+             <p className="text-muted-foreground mt-8 text-center text-sm px-6">
+               Press START to use the stethoscope. (Feature upcoming)
+             </p>
           )}
         </div>
 
