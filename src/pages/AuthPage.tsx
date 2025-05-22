@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from '@/components/ui/use-toast';
+import { toast as sonnerToast } from "sonner"; // Import sonner for success toasts
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
@@ -39,7 +38,7 @@ const AuthPage = () => {
     if (error) {
       toast({ title: 'Login Failed', description: error.message, variant: 'destructive' });
     } else {
-      toast({ title: 'Login Successful', description: 'Redirecting...' });
+      // Removed toast({ title: 'Login Successful', description: 'Redirecting...' });
       // Navigation is handled by AuthContext onAuthStateChange
     }
   };
@@ -61,7 +60,9 @@ const AuthPage = () => {
     if (error) {
       toast({ title: 'Signup Failed', description: error.message, variant: 'destructive' });
     } else {
-      toast({ title: 'Signup Successful', description: 'Please check your email to verify your account.' });
+      sonnerToast.success('Signup Successful', { // Using sonner for success toast
+        description: 'Please check your email to verify your account.',
+      });
       // Potentially redirect or show further instructions
     }
   };
@@ -163,4 +164,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-
