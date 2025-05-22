@@ -1,12 +1,15 @@
+
 import React, { useState } from 'react';
-import { User } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { ArrowLeft } from 'lucide-react'; // Changed from User
+// Removed Avatar and AvatarFallback imports as they are no longer used in headerLeft
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { connectToLinktop, LinktopVitalsData } from '../../services/linktopBLEService';
+import { useNavigate } from 'react-router-dom'; // Added useNavigate
 
 export const DefaultPageHeaderElements = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate(); // Initialized useNavigate
 
   const handleConnectClick = async () => {
     if (isLoading) return; // Prevent multiple clicks while already loading
@@ -37,15 +40,9 @@ export const DefaultPageHeaderElements = () => {
   };
 
   const headerLeft = (
-    <div className="flex items-center gap-2">
-      <Avatar className="h-8 w-8">
-        {/* In a real app, AvatarImage would be used here with a src */}
-        <AvatarFallback className="bg-muted">
-          <User size={18} className="text-muted-foreground" />
-        </AvatarFallback>
-      </Avatar>
-      <span className="text-sm font-medium text-foreground">Guest</span>
-    </div>
+    <Button variant="ghost" size="icon" onClick={() => navigate('/')} aria-label="Go to dashboard">
+      <ArrowLeft className="h-5 w-5 text-foreground" />
+    </Button>
   );
 
   const headerRight = (
@@ -62,3 +59,4 @@ export const DefaultPageHeaderElements = () => {
 
   return { headerLeft, headerRight };
 };
+
