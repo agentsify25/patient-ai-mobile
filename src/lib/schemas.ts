@@ -25,7 +25,17 @@ export const profileSchema = z.object({
   avatarUrl: z.string().url({ message: "Please enter a valid URL" }).optional().or(z.literal('')),
 });
 
+export const vitalSignsSchema = z.object({
+  blood_pressure_systolic: z.coerce.number().int().positive({ message: "Must be a positive number" }),
+  blood_pressure_diastolic: z.coerce.number().int().positive({ message: "Must be a positive number" }),
+  heart_rate: z.coerce.number().int().positive({ message: "Must be a positive number" }),
+  spo2: z.coerce.number().int().min(0, "Cannot be negative").max(100, "Cannot exceed 100"),
+  temperature_celsius: z.coerce.number().positive({ message: "Must be a positive number" }),
+  respiratory_rate: z.coerce.number().int().positive({ message: "Must be a positive number" }),
+  notes: z.string().optional(),
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type SignupFormData = z.infer<typeof signupSchema>;
 export type ProfileFormData = z.infer<typeof profileSchema>;
-
+export type VitalSignsFormData = z.infer<typeof vitalSignsSchema>;

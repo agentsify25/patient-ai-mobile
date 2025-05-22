@@ -10,8 +10,9 @@ import Appointments from "./pages/Appointments";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
-import AuthPage from "./pages/AuthPage"; // Import AuthPage
-import { AuthProvider, useAuth } from "./contexts/AuthContext"; // Import AuthProvider and useAuth
+import AuthPage from "./pages/AuthPage";
+import LogVitalsPage from "./pages/LogVitalsPage"; // Import the new page
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const AppRoutes = () => {
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/log-vitals" element={<LogVitalsPage />} /> {/* Add route for LogVitalsPage */}
       </Route>
       
       <Route path="*" element={<NotFound />} />
