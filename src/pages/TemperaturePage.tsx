@@ -2,10 +2,10 @@
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
-import { Thermometer, Loader2, PlayCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { CircularProgressDisplay } from '@/components/Dashboard/CircularProgressDisplay';
 
 const TemperaturePage = () => {
   const [vitals, setVitals] = useState<LinktopVitalsData | null>(null);
@@ -29,41 +29,63 @@ const TemperaturePage = () => {
 
   return (
     <MobileLayout title="Body Temperature">
-      <div className="space-y-6">
-        <Card className="text-center">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">Body Temperature</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {isLoading && (
-              <div className="flex flex-col items-center justify-center py-8">
-                <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                <p className="text-muted-foreground">Connecting to device and reading data...</p>
-              </div>
+      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem)]">
+        <div className="flex-grow flex flex-col items-center justify-center w-full">
+          {isLoading && !vitals && (
+            <div className="flex flex-col items-center justify-center py-8">
+              <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />
+              <p className="text-muted-foreground text-lg">Connecting to device...</p>
+            </div>
+          )}
+
+          {!isLoading && !vitals && (
+             <CircularProgressDisplay
+              value={null} // Initially no value
+              maxValue={45} // Approx max human temp for scale
+              unit="°C"
+              label="Body Temperature"
+              color="#A8E063" // Lime Green
+              valueFontSize="text-6xl"
+              size={220}
+              isLoading={true}
+            />
+          )}
+
+          {vitals && (
+            <CircularProgressDisplay
+              value={vitals.temperature}
+              maxValue={45} // Approx max human temp for scale
+              unit="°C"
+              label="Body Temperature"
+              color="#A8E063" // Lime Green
+              valueFontSize="text-6xl"
+              size={220}
+              isLoading={isLoading}
+            />
+          )}
+          
+          {vitals?.batteryLevel !== undefined && (
+            <p className="text-sm text-muted-foreground mt-8">Device Battery: {vitals.batteryLevel}%</p>
+          )}
+          {!isLoading && !vitals && (
+             <p className="text-muted-foreground mt-8 text-center">Press START to measure temperature.</p>
+          )}
+        </div>
+
+        <div className="w-full flex justify-center pt-6 mt-auto">
+          <Button
+            onClick={handleStartTest}
+            disabled={isLoading}
+            className="rounded-full w-32 h-32 text-lg bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-2xl focus:ring-4 focus:ring-primary/50"
+            aria-label="Start Test"
+          >
+            {isLoading ? (
+              <Loader2 className="h-12 w-12 animate-spin" />
+            ) : (
+              <span className="font-bold tracking-wider text-xl">START</span>
             )}
-            {!isLoading && vitals && (
-              <div className="p-6">
-                <div className="flex items-center justify-center text-red-500 mb-2">
-                  <Thermometer size={48} />
-                </div>
-                <p className="text-sm text-muted-foreground">Temperature</p>
-                <p className="text-5xl font-bold">
-                  {vitals.temperature !== undefined ? `${vitals.temperature.toFixed(1)} °C` : 'N/A'}
-                </p>
-                {vitals.batteryLevel !== undefined && (
-                  <p className="text-sm text-muted-foreground mt-2">Device Battery: {vitals.batteryLevel}%</p>
-                )}
-              </div>
-            )}
-             {!isLoading && !vitals && (
-              <p className="text-muted-foreground py-8">Press "Start Test" to measure your body temperature.</p>
-            )}
-            <Button onClick={handleStartTest} disabled={isLoading} size="lg" className="w-full">
-              {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <PlayCircle className="mr-2 h-5 w-5" />}
-              {isLoading ? 'Testing...' : 'Start Test'}
-            </Button>
-          </CardContent>
-        </Card>
+          </Button>
+        </div>
       </div>
     </MobileLayout>
   );

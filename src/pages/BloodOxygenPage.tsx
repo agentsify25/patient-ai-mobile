@@ -2,10 +2,10 @@
 import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
-import { Droplets, Loader2, PlayCircle, Heart } from 'lucide-react'; // Keep Heart for potential future use or if API returns it anyway
+import { Loader2, Heart } from 'lucide-react';
 import { toast } from 'sonner';
+import { CircularProgressDisplay } from '@/components/Dashboard/CircularProgressDisplay';
 
 const BloodOxygenPage = () => {
   const [vitals, setVitals] = useState<LinktopVitalsData | null>(null);
@@ -29,55 +29,73 @@ const BloodOxygenPage = () => {
 
   return (
     <MobileLayout title="Blood Oxygen (SpO2)">
-      <div className="space-y-6">
-        <Card className="text-center">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">Blood Oxygen (SpO2)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {isLoading && (
-              <div className="flex flex-col items-center justify-center py-8">
-                <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                <p className="text-muted-foreground">Connecting to device and reading data...</p>
-              </div>
+      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem)]"> {/* Approximate height for flex distribution */}
+        <div className="flex-grow flex flex-col items-center justify-center w-full">
+          {isLoading && !vitals && (
+            <div className="flex flex-col items-center justify-center py-8">
+              <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />
+              <p className="text-muted-foreground text-lg">Connecting to device...</p>
+            </div>
+          )}
+
+          {!isLoading && !vitals && (
+            <CircularProgressDisplay
+              value={null}
+              maxValue={100}
+              unit="%"
+              label="SpO2"
+              color="#00A9DE" // Cyan
+              valueFontSize="text-6xl"
+              size={220}
+              isLoading={true} // Shows '--' initially
+            />
+          )}
+          
+          {vitals && (
+            <CircularProgressDisplay
+              value={vitals.spo2}
+              maxValue={100}
+              unit="%"
+              label="SpO2"
+              color="#00A9DE" // Cyan
+              valueFontSize="text-6xl"
+              size={220}
+              isLoading={isLoading}
+            />
+          )}
+
+          {/* Secondary info like HR */}
+          {vitals?.heartRate !== undefined && (
+            <div className="mt-8 text-center">
+              <Heart size={28} className="inline-block mr-2 text-pink-500" />
+              <span className="text-3xl font-semibold">{vitals.heartRate}</span>
+              <span className="text-muted-foreground ml-1">BPM</span>
+            </div>
+          )}
+          {vitals?.batteryLevel !== undefined && (
+            <p className="text-sm text-muted-foreground mt-4">Device Battery: {vitals.batteryLevel}%</p>
+          )}
+
+          {!isLoading && !vitals && (
+             <p className="text-muted-foreground mt-8 text-center">Press START to measure your blood oxygen.</p>
+          )}
+        </div>
+
+        {/* Start Button Section */}
+        <div className="w-full flex justify-center pt-6 mt-auto">
+          <Button
+            onClick={handleStartTest}
+            disabled={isLoading}
+            className="rounded-full w-32 h-32 text-lg bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-2xl focus:ring-4 focus:ring-primary/50"
+            aria-label="Start Test"
+          >
+            {isLoading ? (
+              <Loader2 className="h-12 w-12 animate-spin" />
+            ) : (
+              <span className="font-bold tracking-wider text-xl">START</span>
             )}
-            {!isLoading && vitals && (
-              <div className="space-y-4">
-                <Card className="p-6">
-                  <div className="flex items-center justify-center text-primary mb-2">
-                    <Droplets size={48} />
-                  </div>
-                  <p className="text-sm text-muted-foreground">Blood Oxygen (SpO2)</p>
-                  <p className="text-5xl font-bold">
-                    {vitals.spo2 !== undefined ? `${vitals.spo2}%` : 'N/A'}
-                  </p>
-                </Card>
-                {/* Display Heart Rate if available from the same reading, but primary focus is SpO2 */}
-                {vitals.heartRate !== undefined && (
-                    <Card className="p-4 bg-muted/30">
-                        <div className="flex items-center justify-center text-pink-500 mb-1">
-                            <Heart size={24} />
-                        </div>
-                        <p className="text-xs text-muted-foreground">Heart Rate (during SpO2 test)</p>
-                        <p className="text-2xl font-semibold">
-                            {`${vitals.heartRate} bpm`}
-                        </p>
-                    </Card>
-                )}
-                 {vitals.batteryLevel !== undefined && (
-                  <p className="text-sm text-muted-foreground mt-2">Device Battery: {vitals.batteryLevel}%</p>
-                )}
-              </div>
-            )}
-            {!isLoading && !vitals && (
-              <p className="text-muted-foreground py-8">Press "Start Test" to measure your blood oxygen.</p>
-            )}
-            <Button onClick={handleStartTest} disabled={isLoading} size="lg" className="w-full">
-              {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <PlayCircle className="mr-2 h-5 w-5" />}
-              {isLoading ? 'Testing...' : 'Start Test'}
-            </Button>
-          </CardContent>
-        </Card>
+          </Button>
+        </div>
       </div>
     </MobileLayout>
   );
