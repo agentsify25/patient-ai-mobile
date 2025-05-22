@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MobileLayout } from "@/components/Layout/MobileLayout";
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
@@ -20,13 +19,79 @@ interface VitalReadingFromDB extends VitalSignsFormData {
   ecg_data_url?: string | null;
 }
 
+const generateMockVitalHistory = (): VitalReadingFromDB[] => {
+  const baseTimestamp = new Date().getTime();
+  return [
+    {
+      id: 'mock1',
+      profile_id: 'mockUser',
+      timestamp: new Date(baseTimestamp - 1000 * 60 * 60 * 5).toISOString(), // 5 hours ago
+      created_at: new Date().toISOString(),
+      blood_pressure_systolic: 120,
+      blood_pressure_diastolic: 80,
+      heart_rate: 75,
+      spo2: 98,
+      temperature_celsius: 36.5,
+      respiratory_rate: 16,
+      notes: 'Mock reading 1',
+    },
+    {
+      id: 'mock2',
+      profile_id: 'mockUser',
+      timestamp: new Date(baseTimestamp - 1000 * 60 * 60 * 3).toISOString(), // 3 hours ago
+      created_at: new Date().toISOString(),
+      blood_pressure_systolic: 125,
+      blood_pressure_diastolic: 82,
+      heart_rate: 70,
+      spo2: 99,
+      temperature_celsius: 36.7,
+      respiratory_rate: 15,
+      notes: 'Mock reading 2',
+    },
+    {
+      id: 'mock3',
+      profile_id: 'mockUser',
+      timestamp: new Date(baseTimestamp - 1000 * 60 * 60 * 1).toISOString(), // 1 hour ago
+      created_at: new Date().toISOString(),
+      blood_pressure_systolic: 118,
+      blood_pressure_diastolic: 78,
+      heart_rate: 80,
+      spo2: 97,
+      temperature_celsius: 36.6,
+      respiratory_rate: 18,
+      notes: 'Mock reading 3',
+    },
+    { // Data point with only heart rate and SpO2 for chart diversity
+      id: 'mock4',
+      profile_id: 'mockUser',
+      timestamp: new Date(baseTimestamp - 1000 * 60 * 30).toISOString(), // 30 mins ago
+      created_at: new Date().toISOString(),
+      heart_rate: 85,
+      spo2: 99,
+      notes: 'Mock reading - HR and SpO2 only',
+    },
+     { // Data point with only BP for chart diversity
+      id: 'mock5',
+      profile_id: 'mockUser',
+      timestamp: new Date(baseTimestamp - 1000 * 60 * 10).toISOString(), // 10 mins ago
+      created_at: new Date().toISOString(),
+      blood_pressure_systolic: 130,
+      blood_pressure_diastolic: 85,
+      notes: 'Mock reading - BP only',
+    }
+  ];
+};
+
 const fetchVitalHistory = async (userId: string | undefined): Promise<VitalReadingFromDB[]> => {
-  if (!userId) return [];
+  if (!userId) {
+    console.log("No user ID, returning mock vital history.");
+    return generateMockVitalHistory();
+  }
   const { data, error } = await supabase
     .from('vital_readings')
     .select('*')
     .eq('profile_id', userId)
-    .order('timestamp', { ascending: true }); // Ascending for chronological chart
+    .order('timestamp', { ascending: true });
 
   if (error) {
     console.error('Error fetching vital history:', error);
@@ -190,4 +255,3 @@ const VitalSignsHistoryPage = () => {
 };
 
 export default VitalSignsHistoryPage;
-
