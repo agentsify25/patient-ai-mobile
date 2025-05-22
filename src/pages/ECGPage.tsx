@@ -18,7 +18,12 @@ const ECGPage = () => {
       const data = await connectToLinktop(); 
       if (data) {
         setVitals(data);
-        toast.success('Device reading attempt complete. Displaying available info.');
+        // Check if any ECG specific data is present as an example
+        if (data.ecg?.hrv !== undefined || data.heartRate !== undefined) {
+             toast.success('Device reading attempt complete. Displaying available ECG related info.');
+        } else {
+            toast.info('ECG specific data not available from this reading.');
+        }
       }
     } catch (error: any) {
       toast.error('Failed to connect or read data.', { description: error.message });
@@ -32,13 +37,20 @@ const ECGPage = () => {
     { label: "Gain", value: "10 mm/mV" },
   ];
 
+  // Helper to format number values or return a default string
+  const formatMetric = (value: number | string | undefined, unit: string = "", defaultValue: string = "-") => {
+    if (value === undefined || value === null) return defaultValue;
+    if (typeof value === 'string') return value; // Already formatted or a string like mood
+    return `${value} ${unit}`.trim();
+  };
+  
   const ecgMetrics = [
-    { label: "RRI max", value: vitals?.ecg?.rriMax ?? "0 ms" }, // Assuming vitals.ecg structure
-    { label: "RRI min", value: vitals?.ecg?.rriMin ?? "0 ms" },
-    { label: "Avg HR", value: vitals?.heartRate !== undefined ? `${vitals.heartRate} BPM` : "0 BPM" },
-    { label: "HRV", value: vitals?.ecg?.hrv ?? "0" },
-    { label: "Mood", value: vitals?.ecg?.mood ?? "-" }, // Hypothetical
-    { label: "Resp Rate", value: vitals?.ecg?.respiratoryRate ?? "0 BPM" },
+    { label: "RRI max", value: formatMetric(vitals?.ecg?.rriMax, "ms", "0 ms") },
+    { label: "RRI min", value: formatMetric(vitals?.ecg?.rriMin, "ms", "0 ms") },
+    { label: "Avg HR", value: formatMetric(vitals?.heartRate, "BPM", "0 BPM") },
+    { label: "HRV", value: formatMetric(vitals?.ecg?.hrv, "", "0") },
+    { label: "Mood", value: vitals?.ecg?.mood ?? "-" }, // Mood is likely a string
+    { label: "Resp Rate", value: formatMetric(vitals?.ecg?.respiratoryRate, "BPM", "0 BPM") },
   ];
 
 
@@ -63,13 +75,12 @@ const ECGPage = () => {
                   </div>
                 ))}
               </div>
-              <div className="ecg-grid bg-card/50">
-                {/* Placeholder for actual ECG graph rendering */}
+              <div className="ecg-grid bg-card/50 w-full aspect-[2/1] max-w-md"> {/* Ensure width and aspect ratio */}
                 <div className="flex items-center justify-center h-full">
                   <p className="text-muted-foreground text-sm">ECG Graph Area</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2 w-full text-sm mt-3">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 w-full text-sm mt-3 max-w-md">
                 {ecgMetrics.map(metric => (
                   <div key={metric.label} className="flex justify-between">
                     <span className="text-muted-foreground">{metric.label}:</span>

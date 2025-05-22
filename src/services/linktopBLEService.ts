@@ -13,11 +13,26 @@ const BATTERY_LEVEL_CHARACTERISTIC_UUID = '00002a19-0000-1000-8000-00805f9b34fb'
 const LINKTOP_CUSTOM_SERVICE_UUID = '0000fff0-0000-1000-8000-00805f9b34fb';
 const LINKTOP_CUSTOM_CHARACTERISTIC_UUID = '0000fff1-0000-1000-8000-00805f9b34fb';
 
+export interface BloodPressureData {
+  systolic?: number;
+  diastolic?: number;
+}
+
+export interface ECGData {
+  rriMax?: number; // Raw value, formatting (e.g., "ms") should be in component
+  rriMin?: number;
+  hrv?: number;
+  mood?: string; // Mood might be textual
+  respiratoryRate?: number;
+}
+
 export interface LinktopVitalsData {
   heartRate?: number;
   spo2?: number;
   temperature?: number;
   batteryLevel?: number;
+  bloodPressure?: BloodPressureData;
+  ecg?: ECGData;
 }
 
 function parseHeartRate(value: DataView): number {
@@ -29,12 +44,14 @@ function parseHeartRate(value: DataView): number {
   return value.getUint8(1);
 }
 
-function parseCustomVitals(value: DataView): { spo2?: number; temperature?: number } {
+function parseCustomVitals(value: DataView): { spo2?: number; temperature?: number; bloodPressure?: BloodPressureData, ecg?: ECGData } {
   // IMPORTANT: This parsing logic is based on the user's example.
   // It MUST be verified against the actual Linktop device's data specification.
   const bytes = new Uint8Array(value.buffer);
   let spo2: number | undefined = undefined;
   let temperature: number | undefined = undefined;
+  let bloodPressure: BloodPressureData | undefined = undefined; // Initialize as undefined
+  let ecg: ECGData | undefined = undefined; // Initialize as undefined
 
   // Example: bytes[2] for SpO2, bytes[3,4] for Temperature
   if (bytes.length >= 3) { // Check if SpO2 byte might exist
@@ -44,11 +61,20 @@ function parseCustomVitals(value: DataView): { spo2?: number; temperature?: numb
     const tempRaw = (bytes[3] << 8) | bytes[4]; // Placeholder: MSB, LSB
     temperature = tempRaw / 10.0; // Placeholder scaling
   }
-  
-  console.log('Raw Custom Data Bytes:', bytes);
-  console.log('Parsed Custom Vitals:', { spo2, temperature });
 
-  return { spo2, temperature };
+  // Placeholder for Blood Pressure and ECG parsing - Device specific
+  // For now, we are not parsing these from the custom characteristic.
+  // If they were part of this characteristic, parsing logic would go here.
+  // e.g., if bytes[5] was systolic and bytes[6] was diastolic:
+  // if (bytes.length >= 7) {
+  //   bloodPressure = { systolic: bytes[5], diastolic: bytes[6] };
+  // }
+  // Similar for ECG data if it came from this characteristic.
+
+  console.log('Raw Custom Data Bytes:', bytes);
+  console.log('Parsed Custom Vitals:', { spo2, temperature, bloodPressure, ecg });
+
+  return { spo2, temperature, bloodPressure, ecg };
 }
 
 export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
@@ -56,56 +82,45 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
   try {
     if (!Capacitor.isNativePlatform()) {
       toast.error("Bluetooth LE is primarily for native mobile devices. Web Bluetooth may have limitations.");
-      // For a web-only implementation, you'd use navigator.bluetooth here.
-      // This implementation focuses on Capacitor for native apps.
       return null;
     }
 
     await BleClient.initialize({ androidNeverForLocation: true });
 
-    // Permissions will be requested by the OS when BleClient.requestLEScan() is called,
-    // if they haven't been granted already.
-    // The explicit BleClient.requestPermissions() call was removed as it's not available.
-
     const enabled = await BleClient.isEnabled();
     if (!enabled) {
       toast.error('Bluetooth is not enabled. Please enable it.');
-      // Optionally try to enable: await BleClient.enable();
       return null;
     }
     
     toast.info('Scanning for Linktop devices...');
 
-    // requestLEScan will trigger OS permission prompts if needed.
     await BleClient.requestLEScan(
       {
         namePrefix: LINKTOP_NAME_PREFIX,
         scanMode: ScanMode.SCAN_MODE_LOW_LATENCY,
-        // services: [HEART_RATE_SERVICE_UUID, BATTERY_SERVICE_UUID, LINKTOP_CUSTOM_SERVICE_UUID], // Optional: can make scan more targeted
       },
       (result) => {
         if (result.device && result.device.name?.startsWith(LINKTOP_NAME_PREFIX)) {
           console.log('Found device:', result.device.name, result.device.deviceId);
           deviceId = result.device.deviceId;
-          BleClient.stopLEScan(); // Stop scan as soon as the first matching device is found
+          BleClient.stopLEScan(); 
         }
       }
     );
 
-    // Wait for scan to find a device or timeout
-    // Increased timeout slightly to 10 seconds (100 * 100ms) for scan and user response to permission prompt
     for (let i = 0; i < 100; i++) { 
         if (deviceId) break;
         await new Promise(resolve => setTimeout(resolve, 100));
     }
-    await BleClient.stopLEScan(); // Ensure scan is stopped if timeout occurs before device found
+    await BleClient.stopLEScan();
 
     if (!deviceId) {
       toast.error('No Linktop device found. Make sure it is nearby, powered on, and in pairing mode if necessary. Also, check Bluetooth permissions for the app.');
       return null;
     }
 
-    const currentDeviceId = deviceId; // Capture for use in disconnect callback
+    const currentDeviceId = deviceId; 
     toast.info(`Connecting to device: ${currentDeviceId.substring(0,8)}...`);
     await BleClient.connect(currentDeviceId, (disconnectedDeviceId) => {
         console.log(`Device ${disconnectedDeviceId} disconnected`);
@@ -130,21 +145,39 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
       console.log('Battery Level:', vitals.batteryLevel);
     } catch (batteryError) {
       console.warn('Could not read Battery Level:', batteryError);
-      // Not toasting for battery as it's less critical than vitals
     }
 
     try {
+      // Assuming custom characteristic might provide SpO2, Temp, and potentially BP/ECG if structured that way.
+      // For now, parseCustomVitals is a placeholder for BP/ECG from this characteristic.
+      // If BP/ECG come from different characteristics, separate read calls would be needed here.
       const customRaw = await BleClient.read(currentDeviceId, LINKTOP_CUSTOM_SERVICE_UUID, LINKTOP_CUSTOM_CHARACTERISTIC_UUID);
-      const { spo2, temperature } = parseCustomVitals(customRaw);
+      const { spo2, temperature, bloodPressure, ecg } = parseCustomVitals(customRaw);
       if (spo2 !== undefined) vitals.spo2 = spo2;
       if (temperature !== undefined) vitals.temperature = temperature;
-      console.log('Custom Vitals:', { spo2, temperature });
+      if (bloodPressure !== undefined) vitals.bloodPressure = bloodPressure; // Assign if parsed
+      if (ecg !== undefined) vitals.ecg = ecg; // Assign if parsed
+
+      // If Blood Pressure and ECG have their own dedicated services/characteristics,
+      // they would be read here similar to Heart Rate and Battery.
+      // For example:
+      // try {
+      //   const bpRaw = await BleClient.read(currentDeviceId, BP_SERVICE_UUID, BP_CHARACTERISTIC_UUID);
+      //   vitals.bloodPressure = parseBloodPressure(bpRaw); // You'd need a parseBloodPressure function
+      // } catch (bpError) { console.warn('Could not read BP'); }
+      //
+      // try {
+      //   const ecgRaw = await BleClient.read(currentDeviceId, ECG_SERVICE_UUID, ECG_CHARACTERISTIC_UUID);
+      //   vitals.ecg = parseECG(ecgRaw); // You'd need a parseECG function
+      // } catch (ecgError) { console.warn('Could not read ECG'); }
+
+
+      console.log('Custom Vitals:', { spo2, temperature, bloodPressure, ecg });
     } catch (customError) {
-      console.warn('Could not read Custom Vitals (SpO2/Temp):', customError);
-      toast.warning('Could not read SpO2/Temperature.');
+      console.warn('Could not read Custom Vitals (SpO2/Temp/BP/ECG):', customError);
+      toast.warning('Could not read SpO2/Temperature/BP/ECG.');
     }
     
-    // It's good practice to disconnect after reading the values if not maintaining a persistent connection.
     await BleClient.disconnect(currentDeviceId);
     toast.info('Disconnected from device.');
 
@@ -152,19 +185,17 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
 
   } catch (error: any) {
     console.error('BLE Operation Error:', error);
-    // Check for common permission-related errors if possible, though errors can be generic.
     let description = error.message || 'Unknown error';
     if (error.message && error.message.toLowerCase().includes('permission')) {
         description = 'Bluetooth permission denied or missing. Please check app settings.';
     }
     toast.error('Bluetooth operation failed.', { description });
-    if (deviceId) { // Attempt to disconnect if an error occurred after connection attempt or successful connection
+    if (deviceId) { 
         try { 
             console.log('Attempting to disconnect due to error...');
             await BleClient.disconnect(deviceId); 
         } catch (e) { 
             console.warn('Error during disconnect after main operation error:', e);
-            /* ignore disconnect error during cleanup */ 
         }
     }
     return null;

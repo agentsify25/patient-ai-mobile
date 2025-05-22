@@ -26,19 +26,18 @@ export const BottomNavigation = () => {
             <Button
               key={item.path}
               variant="ghost"
-              size="sm"
+              size="sm" // Keep size sm, or adjust as needed
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors whitespace-normal ${
+              aria-label={item.label} // Keep label for accessibility
+              className={`flex flex-col items-center justify-center p-2 h-14 w-14 flex-1 transition-colors ${ // Adjusted padding and height/width for icon-only
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
               }`}
               style={{ minWidth: '0' }} // Ensure button can shrink
             >
-              <Icon size={20} />
-              <span className="text-xs font-medium text-center break-words h-8 flex items-center justify-center">
-                {item.label}
-              </span>
+              <Icon size={24} /> {/* Slightly larger icon if desired */}
+              {/* The span with item.label has been removed */}
             </Button>
           );
         })}
@@ -46,4 +45,3 @@ export const BottomNavigation = () => {
     </div>
   );
 };
-

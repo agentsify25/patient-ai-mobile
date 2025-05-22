@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
 import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
-import { Loader2, Heart } from 'lucide-react'; // Heart for potential secondary HR display
+import { Loader2, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { BloodPressureDisplay } from '@/components/Dashboard/BloodPressureDisplay';
 
@@ -14,12 +14,17 @@ const BloodPressurePage = () => {
   const handleStartTest = async () => {
     setIsLoading(true);
     setVitals(null);
-    toast.info('Attempting to read data. Blood Pressure data parsing is not yet fully implemented in the service.');
+    // Inform user that BP data might not be available if parsing is not implemented in service
+    toast.info('Attempting to read data. Blood Pressure data parsing might not be fully implemented in the BLE service.');
     try {
       const data = await connectToLinktop(); 
       if (data) {
         setVitals(data);
-        toast.success('Device reading attempt complete. Displaying available data.');
+        if (data.bloodPressure?.systolic !== undefined && data.bloodPressure?.diastolic !== undefined) {
+            toast.success('Blood Pressure reading attempt complete.');
+        } else {
+            toast.info('Blood Pressure data (Systolic/Diastolic) not available from this reading.');
+        }
       }
     } catch (error: any) {
       toast.error('Failed to connect or read data.', { description: error.message });
@@ -28,10 +33,8 @@ const BloodPressurePage = () => {
     }
   };
 
-  // Placeholder parsing for BP if it were available in vitals.systolic/vitals.diastolic
-  // For now, it will show '-- / --' as these fields are not in LinktopVitalsData directly
-  const systolic = vitals?.bloodPressure?.systolic; // Assuming structure like { bloodPressure: { systolic: X, diastolic: Y } }
-  const diastolic = vitals?.bloodPressure?.diastolic; // This is a hypothetical structure
+  const systolic = vitals?.bloodPressure?.systolic;
+  const diastolic = vitals?.bloodPressure?.diastolic;
 
   return (
     <MobileLayout title="Blood Pressure">
@@ -45,13 +48,11 @@ const BloodPressurePage = () => {
           )}
           
           <BloodPressureDisplay
-            // Currently, LinktopVitalsData does not have distinct systolic/diastolic fields.
-            // These will show as '--' until the service provides them or the type is updated.
             systolic={systolic} 
             diastolic={diastolic}
             unit="mmHg"
-            color="#FFB800" // A slightly richer yellow/gold
-            isLoading={isLoading && !vitals} // Show '--' if loading and no old data
+            color="#FFB800"
+            isLoading={isLoading && !vitals}
           />
           
           {vitals?.heartRate !== undefined && (
@@ -67,7 +68,7 @@ const BloodPressurePage = () => {
            {!isLoading && !vitals && (
              <p className="text-muted-foreground mt-8 text-center">Press START to measure blood pressure.</p>
           )}
-           {vitals && !systolic && !diastolic && !isLoading && (
+           {vitals && (systolic === undefined || diastolic === undefined) && !isLoading && (
             <p className="text-muted-foreground mt-4 text-center text-xs">
               Blood pressure data (Systolic/Diastolic) not available from this reading.
             </p>
