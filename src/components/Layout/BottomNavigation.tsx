@@ -1,12 +1,12 @@
 
-import { Home, Activity, Calendar, MessageCircle, User, ClipboardPlus } from 'lucide-react'; // Added ClipboardPlus
+import { Home, Activity, Calendar, MessageCircle, User, ClipboardPlus } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const navigationItems = [
   { icon: Home, label: 'Home', path: '/' },
   { icon: Activity, label: 'Health', path: '/health' },
-  { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' }, // Added Log Vitals item
+  { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' },
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
   { icon: MessageCircle, label: 'Messages', path: '/messages' },
   { icon: User, label: 'Profile', path: '/profile' },
@@ -29,7 +29,7 @@ export const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto w-1/6 transition-colors ${ // Adjusted px and width for more items
+              className={`flex flex-col items-center justify-center gap-1 px-1 py-2 h-auto flex-1 transition-colors ${ // Changed px-2 to px-1 and w-1/6 to flex-1
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -37,7 +37,7 @@ export const BottomNavigation = () => {
               style={{ minWidth: '0' }} // Ensure button can shrink
             >
               <Icon size={20} />
-              <span className="text-xs font-medium text-center break-words">{item.label}</span> {/* Added text-center and break-words */}
+              <span className="text-xs font-medium text-center break-words">{item.label}</span>
             </Button>
           );
         })}
@@ -45,3 +45,4 @@ export const BottomNavigation = () => {
     </div>
   );
 };
+
