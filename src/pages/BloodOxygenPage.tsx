@@ -104,7 +104,7 @@ const BloodOxygenPage = () => {
           <Button
             onClick={handleStartTest}
             disabled={isLoading}
-            className="rounded-full w-24 h-24 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
+            className="rounded-full w-20 h-20 bg-primary hover:bg-primary/90 text-primary-foreground flex flex-col items-center justify-center shadow-xl focus:ring-4 focus:ring-primary/50"
             aria-label="Start Test"
           >
             {isLoading ? (
