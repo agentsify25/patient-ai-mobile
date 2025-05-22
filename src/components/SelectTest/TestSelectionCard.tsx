@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 interface TestSelectionCardProps {
   name: string;
-  description: string;
+  description: string; // Keep description in props for potential future use, but won't render it
   path: string;
   icon: LucideIcon;
   iconClassName?: string;
@@ -18,18 +18,17 @@ export const TestSelectionCard = ({ name, description, path, icon: Icon, iconCla
 
   return (
     <Card
-      className="bg-card hover:bg-muted/50 transition-all cursor-pointer flex flex-col justify-between h-full"
+      className="bg-card hover:bg-muted/50 transition-all cursor-pointer flex flex-col justify-between h-full items-center py-4" // Added items-center and py-4 for better vertical centering
       onClick={() => navigate(path)}
     >
-      <CardHeader className="pb-2">
-        <div className="flex justify-center mb-3">
+      <CardHeader className="pb-2 pt-0"> {/* Adjusted padding */}
+        <div className="flex justify-center mb-2"> {/* Reduced margin */}
           <Icon size={48} className={cn("text-primary", iconClassName)} />
         </div>
-        <CardTitle className="text-xl text-center">{name}</CardTitle>
+        <CardTitle className="text-lg text-center">{name}</CardTitle> {/* Slightly smaller title for compactness */}
       </CardHeader>
-      <CardContent className="text-center flex-grow">
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardContent>
+      {/* The CardContent and p tag for description have been removed */}
     </Card>
   );
 };
+
