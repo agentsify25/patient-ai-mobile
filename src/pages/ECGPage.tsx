@@ -62,8 +62,9 @@ const ECGPage = () => {
   };
 
   return (
-    <MobileLayout title="ECG" headerLeft={headerLeft} headerRight={headerRight}>
-      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem)]">
+    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+      <h1 className="text-2xl font-semibold mb-6 text-center">ECG</h1>
+      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem-3rem)]">
         <div className="flex-grow flex flex-col items-center justify-center w-full space-y-3">
           {isLoading && !vitals && (
             <div className="flex flex-col items-center justify-center py-8">

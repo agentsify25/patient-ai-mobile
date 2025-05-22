@@ -33,8 +33,9 @@ const HeartRatePage = () => {
   };
 
   return (
-    <MobileLayout title="Heart Rate" headerLeft={headerLeft} headerRight={headerRight}>
-      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem)]">
+    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Heart Rate</h1>
+      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem)]">
         {isLoading && !vitals &&(
           <div className="flex flex-col items-center justify-center py-8">
             <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />

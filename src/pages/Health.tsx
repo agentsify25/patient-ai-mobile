@@ -116,7 +116,8 @@ const Health = () => {
   const displayedVitalsData = latestVitals ? transformVitalsForDisplay(latestVitals) : [];
 
   return (
-    <MobileLayout title="Health Dashboard">
+    <MobileLayout>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Health Dashboard</h1>
       <div className="space-y-6">
         {/* Overview Stats */}
         <Card className="p-6 bg-gradient-to-br from-primary/10 to-secondary/10 border-primary/20">

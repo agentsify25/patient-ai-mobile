@@ -1,4 +1,3 @@
-
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -46,7 +45,8 @@ const Appointments = () => {
   };
 
   return (
-    <MobileLayout title="Appointments">
+    <MobileLayout>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Appointments</h1>
       <div className="space-y-6">
         {/* Add New Appointment Button */}
         <Button className="w-full" size="lg">

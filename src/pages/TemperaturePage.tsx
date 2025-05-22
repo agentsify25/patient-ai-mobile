@@ -29,8 +29,9 @@ const TemperaturePage = () => {
   };
 
   return (
-    <MobileLayout title="Body Temperature" headerLeft={headerLeft} headerRight={headerRight}>
-      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem)]">
+    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Body Temperature</h1>
+      <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem-3rem)]">
         <div className="flex-grow flex flex-col items-center justify-center w-full">
           {isLoading && !vitals && (
             <div className="flex flex-col items-center justify-center py-8">
@@ -40,7 +41,7 @@ const TemperaturePage = () => {
           )}
 
           {!isLoading && !vitals && (
-             <CircularProgressDisplay
+            <CircularProgressDisplay
               value={null} 
               maxValue={45} 
               unit="°C"
@@ -67,8 +68,7 @@ const TemperaturePage = () => {
             />
           )}
           
-          {/* "Body Temperature" label with dashed lines */}
-           <div className="mt-10 flex flex-col items-center"> {/* Increased mt for spacing */}
+          <div className="mt-10 flex flex-col items-center">
             <span className="text-sm text-muted-foreground">Body Temperature</span>
             <div className="flex items-end justify-center h-10 space-x-4 mt-1">
               <div className="flex flex-col items-center">
