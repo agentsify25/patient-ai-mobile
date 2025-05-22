@@ -38,10 +38,7 @@ export const HamburgerMenuButton = () => {
       <SheetContent side="left" className="w-[280px] sm:w-[320px] p-0">
         <SheetHeader className="p-4 border-b">
           <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
-           <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-            <X className="h-5 w-5" />
-            <span className="sr-only">Close</span>
-          </SheetClose>
+          {/* Removed the explicit SheetClose button from here */}
         </SheetHeader>
         <div className="p-4 space-y-2">
           <SheetClose asChild>
@@ -61,3 +58,4 @@ export const HamburgerMenuButton = () => {
     </Sheet>
   );
 };
+
