@@ -11,6 +11,11 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import LogVitalsPage from "./pages/LogVitalsPage";
+import SelectTestPage from "./pages/SelectTestPage";
+import BloodOxygenPage from "./pages/BloodOxygenPage";
+import BloodPressurePage from "./pages/BloodPressurePage";
+import TemperaturePage from "./pages/TemperaturePage";
+import ECGPage from "./pages/ECGPage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 
@@ -56,6 +61,11 @@ const AppRoutes = () => {
         <Route path="/messages" element={<Messages />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/log-vitals" element={<LogVitalsPage />} />
+        <Route path="/select-test" element={<SelectTestPage />} />
+        <Route path="/blood-oxygen" element={<BloodOxygenPage />} />
+        <Route path="/blood-pressure" element={<BloodPressurePage />} />
+        <Route path="/temperature" element={<TemperaturePage />} />
+        <Route path="/ecg" element={<ECGPage />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />

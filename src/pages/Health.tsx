@@ -1,4 +1,3 @@
-
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { VitalCard } from '@/components/Health/VitalCard';
 import { Card } from '@/components/ui/card';
@@ -169,9 +168,14 @@ const Health = () => {
             <LineChart size={20} />
             View Detailed Charts
           </Button>
-          <Button variant="outline" className="w-full flex items-center justify-center gap-2" size="lg" onClick={() => toast({title: "Coming Soon!", description: "Device connectivity will be available soon."})}>
+          <Button 
+            variant="outline" 
+            className="w-full flex items-center justify-center gap-2" 
+            size="lg" 
+            onClick={() => navigate('/select-test')} // Updated onClick
+          >
             <Smartphone size={20} />
-            Connect Device
+            Connect Device & Test
           </Button>
         </div>
       </div>
