@@ -1,5 +1,5 @@
 
-import { Home, Activity, Calendar, MessageCircle, ClipboardPlus } from 'lucide-react'; // Removed User import
+import { Home, Activity, Calendar, MessageCircle, ClipboardPlus } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -9,7 +9,6 @@ const navigationItems = [
   { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' },
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
   { icon: MessageCircle, label: 'Messages', path: '/messages' },
-  // { icon: User, label: 'Profile', path: '/profile' }, // Removed Profile item
 ];
 
 export const BottomNavigation = () => {
@@ -37,7 +36,7 @@ export const BottomNavigation = () => {
               style={{ minWidth: '0' }} // Ensure button can shrink
             >
               <Icon size={20} />
-              <span className="text-xs font-medium text-center break-words w-full">{item.label}</span>
+              <span className="text-xs font-medium text-center break-words">{item.label}</span>
             </Button>
           );
         })}
@@ -45,3 +44,4 @@ export const BottomNavigation = () => {
     </div>
   );
 };
+
