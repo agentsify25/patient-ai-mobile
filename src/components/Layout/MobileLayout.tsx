@@ -1,8 +1,7 @@
-
 import { ReactNode } from 'react';
 import { BottomNavigation } from './BottomNavigation';
 import { TopNavigation } from './TopNavigation';
-import { HamburgerMenuButton } from './HamburgerMenuButton'; // Import the new component
+import { HamburgerMenuButton } from './HamburgerMenuButton';
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -14,14 +13,16 @@ export const MobileLayout = ({ children, title }: MobileLayoutProps) => {
     <div className="min-h-screen bg-background pb-20">
       {/* Header section */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="flex items-center h-14 px-4"> {/* Removed justify-between, rely on flex-grow */}
-          <HamburgerMenuButton /> {/* Add hamburger menu button */}
+        <div className="flex items-center h-14 px-4">
+          <HamburgerMenuButton />
           {title ? (
             <h1 className="text-lg font-semibold truncate text-center flex-grow mx-2">{title}</h1>
           ) : (
-            <div className="flex-grow" /> /* Placeholder to push TopNavigation right if no title */
+            <div className="flex-grow" /> 
           )}
-          <TopNavigation /> {/* This contains Profile and Settings icons */}
+          <div className="w-10">
+            <TopNavigation />
+          </div>
         </div>
       </div>
       <main className="px-4 py-6">
