@@ -29,7 +29,7 @@ export const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 px-1 py-2 h-auto flex-1 transition-colors ${ // Changed px-2 to px-1 and w-1/6 to flex-1
+              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors ${ // Changed px-1 back to px-2
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -45,4 +45,3 @@ export const BottomNavigation = () => {
     </div>
   );
 };
-
