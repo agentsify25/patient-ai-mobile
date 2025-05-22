@@ -36,7 +36,9 @@ export const BottomNavigation = () => {
               style={{ minWidth: '0' }} // Ensure button can shrink
             >
               <Icon size={20} />
-              <span className="text-xs font-medium text-center break-words">{item.label}</span>
+              <span className="text-xs font-medium text-center break-words h-8 flex items-center justify-center">
+                {item.label}
+              </span>
             </Button>
           );
         })}
