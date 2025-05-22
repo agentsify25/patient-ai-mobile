@@ -3,65 +3,17 @@ import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { VitalCard } from '@/components/Health/VitalCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Activity, Thermometer, Droplets, Zap, Gauge } from 'lucide-react';
+import { vitalsData } from '@/data/healthVitals';
+import { toast } from "@/hooks/use-toast";
+import { PlusCircle, LineChart, Smartphone, BookPlus } from 'lucide-react';
 
 const Health = () => {
-  const vitals = [
-    {
-      title: 'Blood Pressure',
-      value: '121/77',
-      unit: 'mmHg',
-      status: 'warning' as const,
-      trend: 'up' as const,
-      icon: <Heart size={20} />,
-      gradient: 'gradient-warning'
-    },
-    {
-      title: 'Heart Rate',
-      value: '72',
-      unit: 'BPM',
-      status: 'normal' as const,
-      trend: 'stable' as const,
-      icon: <Activity size={20} />,
-      gradient: 'gradient-success'
-    },
-    {
-      title: 'SpO2',
-      value: '98',
-      unit: '%',
-      status: 'normal' as const,
-      trend: 'stable' as const,
-      icon: <Droplets size={20} />,
-      gradient: 'gradient-health'
-    },
-    {
-      title: 'Temperature',
-      value: '98.6',
-      unit: '°F',
-      status: 'normal' as const,
-      trend: 'stable' as const,
-      icon: <Thermometer size={20} />,
-      gradient: 'gradient-success'
-    },
-    {
-      title: 'Glucose',
-      value: '95',
-      unit: 'mg/dL',
-      status: 'normal' as const,
-      trend: 'down' as const,
-      icon: <Zap size={20} />,
-      gradient: 'gradient-health'
-    },
-    {
-      title: 'Weight',
-      value: '72.5',
-      unit: 'kg',
-      status: 'normal' as const,
-      trend: 'down' as const,
-      icon: <Gauge size={20} />,
-      gradient: 'gradient-success'
-    }
-  ];
+  const handleLogSymptom = () => {
+    toast({
+      title: "Symptom Logged",
+      description: "Your symptom has been noted. (Placeholder)",
+    });
+  };
 
   return (
     <MobileLayout title="Health Dashboard">
@@ -81,7 +33,7 @@ const Health = () => {
         <div>
           <h3 className="text-lg font-semibold mb-4">Current Vitals</h3>
           <div className="grid grid-cols-2 gap-4">
-            {vitals.map((vital, index) => (
+            {vitalsData.map((vital, index) => (
               <VitalCard key={index} {...vital} />
             ))}
           </div>
@@ -89,13 +41,20 @@ const Health = () => {
 
         {/* Quick Actions */}
         <div className="space-y-3">
-          <Button className="w-full" size="lg">
+          <Button className="w-full flex items-center justify-center gap-2" size="lg">
+            <PlusCircle size={20} />
             Take New Reading
           </Button>
-          <Button variant="outline" className="w-full" size="lg">
+          <Button variant="outline" className="w-full flex items-center justify-center gap-2" size="lg" onClick={handleLogSymptom}>
+            <BookPlus size={20} />
+            Log Symptom
+          </Button>
+          <Button variant="outline" className="w-full flex items-center justify-center gap-2" size="lg">
+            <LineChart size={20} />
             View Detailed Charts
           </Button>
-          <Button variant="outline" className="w-full" size="lg">
+          <Button variant="outline" className="w-full flex items-center justify-center gap-2" size="lg">
+            <Smartphone size={20} />
             Connect Device
           </Button>
         </div>
