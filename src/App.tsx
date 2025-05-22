@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,7 +10,7 @@ import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
-import LogVitalsPage from "./pages/LogVitalsPage"; // Import the new page
+import LogVitalsPage from "./pages/LogVitalsPage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 
@@ -49,14 +48,14 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
-      <Route path="/auth" element={session ? <Navigate to="/profile" replace /> : <AuthPage />} />
+      <Route path="/auth" element={session ? <Navigate to="/" replace /> : <AuthPage />} />
       
       <Route element={<ProtectedRoute />}>
         <Route path="/health" element={<Health />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/log-vitals" element={<LogVitalsPage />} /> {/* Add route for LogVitalsPage */}
+        <Route path="/log-vitals" element={<LogVitalsPage />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />

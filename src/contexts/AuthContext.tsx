@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
@@ -36,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (_event === 'SIGNED_OUT') {
            setTimeout(() => navigate('/auth'),0); // Navigate after state update
         } else if (_event === 'SIGNED_IN') {
-           setTimeout(() => navigate('/profile'),0);
+           setTimeout(() => navigate('/'),0); // Changed to redirect to Home page
         }
       }
     );
