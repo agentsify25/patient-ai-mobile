@@ -1,5 +1,5 @@
 
-import { Home, Activity, Calendar, MessageCircle, ClipboardPlus } from 'lucide-react';
+import { Home, Activity, Calendar, MessageCircle, ClipboardPlus, Settings } from 'lucide-react'; // Added Settings
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -8,7 +8,8 @@ const navigationItems = [
   { icon: Activity, label: 'Health', path: '/health' },
   { icon: ClipboardPlus, label: 'Log Vitals', path: '/log-vitals' },
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
-  { icon: MessageCircle, label: 'Messages', path: '/messages' },
+  // { icon: MessageCircle, label: 'Messages', path: '/messages' }, // Original messages item
+  { icon: Settings, label: 'Settings', path: '/settings' }, // Added Settings
 ];
 
 export const BottomNavigation = () => {
@@ -26,18 +27,17 @@ export const BottomNavigation = () => {
             <Button
               key={item.path}
               variant="ghost"
-              size="sm" // Keep size sm, or adjust as needed
+              size="sm" 
               onClick={() => navigate(item.path)}
-              aria-label={item.label} // Keep label for accessibility
-              className={`flex flex-col items-center justify-center p-2 h-16 w-16 flex-1 transition-colors ${ // Adjusted padding and height/width for icon-only
+              aria-label={item.label}
+              className={`flex flex-col items-center justify-center p-2 h-16 w-16 flex-1 transition-colors ${
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
               }`}
-              style={{ minWidth: '0' }} // Ensure button can shrink
+              style={{ minWidth: '0' }} 
             >
-              <Icon size={28} /> {/* Increased icon size from 24 to 28 */}
-              {/* The span with item.label has been removed */}
+              <Icon size={28} />
             </Button>
           );
         })}
@@ -45,4 +45,3 @@ export const BottomNavigation = () => {
     </div>
   );
 };
-

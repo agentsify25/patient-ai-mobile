@@ -2,7 +2,7 @@
 import { ReactNode } from 'react';
 import { BottomNavigation } from './BottomNavigation';
 // import { TopNavigation } from './TopNavigation'; // Will be replaced by headerRight
-import { HamburgerMenuButton } from './HamburgerMenuButton';
+// import { HamburgerMenuButton } from './HamburgerMenuButton'; // No longer default
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ export const MobileLayout = ({ children, title, headerLeft, headerRight }: Mobil
       {/* Header section */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
         <div className="flex items-center h-14 px-4">
-          {headerLeft ? headerLeft : <HamburgerMenuButton />}
+          {headerLeft ? headerLeft : null /* Changed from <HamburgerMenuButton /> to null */}
           {title ? (
             <h1 className="text-lg font-semibold truncate text-center flex-grow mx-2 mt-1">{title}</h1>
           ) : (

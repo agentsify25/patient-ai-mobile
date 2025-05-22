@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,8 +7,9 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom
 import Index from "./pages/Index";
 import Health from "./pages/Health";
 import Appointments from "./pages/Appointments";
-import Messages from "./pages/Messages";
+// import Messages from "./pages/Messages"; // Messages icon was replaced by Settings
 import Profile from "./pages/Profile";
+import SettingsPage from "./pages/SettingsPage"; // Import new SettingsPage
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import LogVitalsPage from "./pages/LogVitalsPage";
@@ -60,8 +62,9 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route path="/health" element={<Health />} />
         <Route path="/appointments" element={<Appointments />} />
-        <Route path="/messages" element={<Messages />} />
+        {/* <Route path="/messages" element={<Messages />} /> */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<SettingsPage />} /> {/* Add route for SettingsPage */}
         <Route path="/log-vitals" element={<LogVitalsPage />} />
         <Route path="/select-test" element={<SelectTestPage />} />
         <Route path="/blood-oxygen" element={<BloodOxygenPage />} />
