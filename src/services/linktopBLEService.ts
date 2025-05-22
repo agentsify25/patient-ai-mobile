@@ -1,4 +1,3 @@
-
 import { BleClient, ScanMode } from '@capacitor-community/bluetooth-le';
 import { Capacitor } from '@capacitor/core';
 import { toast } from 'sonner';
@@ -62,31 +61,12 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
       return null;
     }
 
-    await BleClient.initialize({ androidNeverForLocation: true }); // Initialize without location for Android 12+ if not scanning
+    await BleClient.initialize({ androidNeverForLocation: true });
 
-    // Request Bluetooth permissions (Android specific, iOS handles it via Info.plist)
-    // On Android, if targeting SDK 31+, BLUETOOTH_SCAN and BLUETOOTH_CONNECT are needed.
-    // ACCESS_FINE_LOCATION is needed for scanning pre-Android 12.
-    // BleClient.requestPermissions handles this.
-    const permissionsResult = await BleClient.requestPermissions();
-    let hasRequiredPermissions = false;
-    if (Capacitor.getPlatform() === 'android') {
-        // For Android 12+ (API 31+): bluetoothScan & bluetoothConnect are key.
-        // For older Android: coarseLocation (ACCESS_FINE_LOCATION implicitly grants this)
-        // This check is simplified; robust permission handling might need more detail.
-        hasRequiredPermissions = permissionsResult.bluetoothScan === 'granted' && permissionsResult.bluetoothConnect === 'granted';
-        if (!hasRequiredPermissions && permissionsResult.coarseLocation === 'granted') { // Fallback for older Android
-             hasRequiredPermissions = true;
-        }
-    } else if (Capacitor.getPlatform() === 'ios') {
-        hasRequiredPermissions = permissionsResult.bluetooth === 'granted';
-    }
+    // Permissions will be requested by the OS when BleClient.requestLEScan() is called,
+    // if they haven't been granted already.
+    // The explicit BleClient.requestPermissions() call was removed as it's not available.
 
-    if (!hasRequiredPermissions) {
-      toast.error('Required Bluetooth permissions were not granted.');
-      return null;
-    }
-    
     const enabled = await BleClient.isEnabled();
     if (!enabled) {
       toast.error('Bluetooth is not enabled. Please enable it.');
@@ -96,29 +76,32 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
     
     toast.info('Scanning for Linktop devices...');
 
+    // requestLEScan will trigger OS permission prompts if needed.
     await BleClient.requestLEScan(
       {
         namePrefix: LINKTOP_NAME_PREFIX,
         scanMode: ScanMode.SCAN_MODE_LOW_LATENCY,
+        // services: [HEART_RATE_SERVICE_UUID, BATTERY_SERVICE_UUID, LINKTOP_CUSTOM_SERVICE_UUID], // Optional: can make scan more targeted
       },
       (result) => {
         if (result.device && result.device.name?.startsWith(LINKTOP_NAME_PREFIX)) {
           console.log('Found device:', result.device.name, result.device.deviceId);
           deviceId = result.device.deviceId;
-          BleClient.stopLEScan();
+          BleClient.stopLEScan(); // Stop scan as soon as the first matching device is found
         }
       }
     );
 
     // Wait for scan to find a device or timeout
-    for (let i = 0; i < 100; i++) { // ~10 seconds timeout
+    // Increased timeout slightly to 10 seconds (100 * 100ms) for scan and user response to permission prompt
+    for (let i = 0; i < 100; i++) { 
         if (deviceId) break;
         await new Promise(resolve => setTimeout(resolve, 100));
     }
-    await BleClient.stopLEScan(); // Ensure scan is stopped
+    await BleClient.stopLEScan(); // Ensure scan is stopped if timeout occurs before device found
 
     if (!deviceId) {
-      toast.error('No Linktop device found. Make sure it is nearby, powered on, and in pairing mode if necessary.');
+      toast.error('No Linktop device found. Make sure it is nearby, powered on, and in pairing mode if necessary. Also, check Bluetooth permissions for the app.');
       return null;
     }
 
@@ -147,6 +130,7 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
       console.log('Battery Level:', vitals.batteryLevel);
     } catch (batteryError) {
       console.warn('Could not read Battery Level:', batteryError);
+      // Not toasting for battery as it's less critical than vitals
     }
 
     try {
@@ -160,6 +144,7 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
       toast.warning('Could not read SpO2/Temperature.');
     }
     
+    // It's good practice to disconnect after reading the values if not maintaining a persistent connection.
     await BleClient.disconnect(currentDeviceId);
     toast.info('Disconnected from device.');
 
@@ -167,9 +152,20 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
 
   } catch (error: any) {
     console.error('BLE Operation Error:', error);
-    toast.error('Bluetooth operation failed.', { description: error.message || 'Unknown error' });
-    if (deviceId) { // Attempt to disconnect if an error occurred after connection
-        try { await BleClient.disconnect(deviceId); } catch (e) { /* ignore disconnect error */ }
+    // Check for common permission-related errors if possible, though errors can be generic.
+    let description = error.message || 'Unknown error';
+    if (error.message && error.message.toLowerCase().includes('permission')) {
+        description = 'Bluetooth permission denied or missing. Please check app settings.';
+    }
+    toast.error('Bluetooth operation failed.', { description });
+    if (deviceId) { // Attempt to disconnect if an error occurred after connection attempt or successful connection
+        try { 
+            console.log('Attempting to disconnect due to error...');
+            await BleClient.disconnect(deviceId); 
+        } catch (e) { 
+            console.warn('Error during disconnect after main operation error:', e);
+            /* ignore disconnect error during cleanup */ 
+        }
     }
     return null;
   }
