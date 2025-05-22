@@ -20,6 +20,8 @@ import HeartRatePage from "./pages/HeartRatePage";
 import BloodGlucosePage from "./pages/BloodGlucosePage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Loader2 } from "lucide-react";
+import AuthPage from "./pages/AuthPage"; // Added import
+import NotFound from "./pages/NotFound"; // Added import
 
 const queryClient = new QueryClient();
 

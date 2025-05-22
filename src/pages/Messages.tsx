@@ -4,8 +4,10 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Phone, Video, User, Plus } from 'lucide-react';
+import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
 
 const Messages = () => {
+  const { headerLeft, headerRight } = DefaultPageHeaderElements();
   const conversations = [
     {
       id: 1,
@@ -37,7 +39,8 @@ const Messages = () => {
   ];
 
   return (
-    <MobileLayout title="Messages">
+    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Messages</h1>
       <div className="space-y-6">
         {/* Emergency Contact */}
         <Card className="p-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 border-red-500/20">
