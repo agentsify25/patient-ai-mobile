@@ -18,6 +18,8 @@ import TemperaturePage from "./pages/TemperaturePage";
 import ECGPage from "./pages/ECGPage";
 import HeartRatePage from "./pages/HeartRatePage";
 import BloodGlucosePage from "./pages/BloodGlucosePage";
+import StethoscopePage from "./pages/StethoscopePage"; // New import
+import OtoscopePage from "./pages/OtoscopePage"; // New import
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Loader2 } from "lucide-react";
 import AuthPage from "./pages/AuthPage"; // Added import
@@ -75,6 +77,8 @@ const AppRoutes = () => {
         <Route path="/ecg" element={<ECGPage />} />
         <Route path="/heart-rate" element={<HeartRatePage />} />
         <Route path="/blood-glucose" element={<BloodGlucosePage />} />
+        <Route path="/stethoscope" element={<StethoscopePage />} /> {/* New route */}
+        <Route path="/otoscope" element={<OtoscopePage />} /> {/* New route */}
       </Route>
       
       <Route path="*" element={<NotFound />} />

@@ -1,6 +1,6 @@
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { TestSelectionCard } from '@/components/SelectTest/TestSelectionCard';
-import { Droplets, HeartPulse, Thermometer, Activity, List, Heart, Pipette } from 'lucide-react'; // Added Heart, Pipette
+import { Droplets, HeartPulse, Thermometer, Activity, List, Heart, Pipette, Stethoscope, Ear } from 'lucide-react'; // Added Stethoscope, Ear
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
 
@@ -11,6 +11,8 @@ const tests = [
   { name: 'ECG', path: '/ecg', description: 'Record Electrocardiogram', icon: Activity, iconClassName: "text-green-500" },
   { name: 'Heart Rate', path: '/heart-rate', description: 'Measure Beats Per Minute', icon: Heart, iconClassName: "text-pink-500" },
   { name: 'Blood Glucose', path: '/blood-glucose', description: 'Measure Blood Sugar Levels', icon: Pipette, iconClassName: "text-purple-500" },
+  { name: 'Stethoscope', path: '/stethoscope', description: 'Listen to Body Sounds', icon: Stethoscope, iconClassName: "text-gray-500" },
+  { name: 'Otoscope', path: '/otoscope', description: 'Examine Ear Canal', icon: Ear, iconClassName: "text-teal-500" },
 ];
 
 const SelectTestPage = () => {
