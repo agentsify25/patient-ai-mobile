@@ -1,23 +1,32 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
-import { Loader2, Camera } from 'lucide-react'; // Added Camera
+import { Loader2, Camera, ArrowLeft } from 'lucide-react'; // Added ArrowLeft
 import { toast } from 'sonner';
-// Removed CircularProgressDisplay import
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
+
 const OtoscopePage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    headerLeft,
-    headerRight
-  } = DefaultPageHeaderElements();
+  const navigate = useNavigate(); // Initialize useNavigate
+  const { headerRight: defaultHeaderRight } = DefaultPageHeaderElements(); // Get default right header
+
   const handleStartTest = async () => {
     setIsLoading(true);
     toast.info('Otoscope feature is not yet implemented.');
     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate an action
     setIsLoading(false);
   };
-  return <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+
+  // Custom headerLeft with back button
+  const headerLeft = (
+    <Button variant="ghost" size="icon" onClick={() => navigate('/select-test')} aria-label="Go back to select test">
+      <ArrowLeft className="h-5 w-5" />
+    </Button>
+  );
+
+  return (
+    <MobileLayout headerLeft={headerLeft} headerRight={defaultHeaderRight}>
       <h1 className="text-2xl font-semibold mb-6 text-center">Otoscope</h1>
       <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem-3rem)]">
         <div className="flex-grow flex flex-col items-center justify-center w-full">
@@ -45,6 +54,7 @@ const OtoscopePage = () => {
           </Button>
         </div>
       </div>
-    </MobileLayout>;
+    </MobileLayout>
+  );
 };
 export default OtoscopePage;
