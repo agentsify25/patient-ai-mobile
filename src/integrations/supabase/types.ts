@@ -677,6 +677,36 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          national_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          national_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          national_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
           created_at: string
@@ -777,6 +807,59 @@ export type Database = {
             columns: ["patient_id_link"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vital_readings: {
+        Row: {
+          blood_pressure_diastolic: number | null
+          blood_pressure_systolic: number | null
+          created_at: string
+          ecg_data_url: string | null
+          heart_rate: number | null
+          id: string
+          notes: string | null
+          profile_id: string
+          respiratory_rate: number | null
+          spo2: number | null
+          temperature_celsius: number | null
+          timestamp: string
+        }
+        Insert: {
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          created_at?: string
+          ecg_data_url?: string | null
+          heart_rate?: number | null
+          id?: string
+          notes?: string | null
+          profile_id: string
+          respiratory_rate?: number | null
+          spo2?: number | null
+          temperature_celsius?: number | null
+          timestamp?: string
+        }
+        Update: {
+          blood_pressure_diastolic?: number | null
+          blood_pressure_systolic?: number | null
+          created_at?: string
+          ecg_data_url?: string | null
+          heart_rate?: number | null
+          id?: string
+          notes?: string | null
+          profile_id?: string
+          respiratory_rate?: number | null
+          spo2?: number | null
+          temperature_celsius?: number | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vital_readings_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
