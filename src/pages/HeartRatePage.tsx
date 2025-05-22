@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
 import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { CircularProgressDisplay } from '@/components/Dashboard/CircularProgressDisplay';
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
@@ -10,7 +11,8 @@ import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeader
 const HeartRatePage = () => {
   const [vitals, setVitals] = useState<LinktopVitalsData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { headerLeft, headerRight } = DefaultPageHeaderElements();
+  const navigate = useNavigate();
+  const { headerRight: defaultHeaderRight } = DefaultPageHeaderElements();
 
   const handleStartTest = async () => {
     setIsLoading(true);
@@ -32,8 +34,14 @@ const HeartRatePage = () => {
     }
   };
 
+  const headerLeft = (
+    <Button variant="ghost" size="icon" onClick={() => navigate('/select-test')} aria-label="Go back to select test">
+      <ArrowLeft className="h-5 w-5" />
+    </Button>
+  );
+
   return (
-    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+    <MobileLayout headerLeft={headerLeft} headerRight={defaultHeaderRight}>
       <h1 className="text-2xl font-semibold mb-6 text-center">Heart Rate</h1>
       <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem-3rem)]">
         <div className="flex-grow flex flex-col items-center justify-center w-full">
