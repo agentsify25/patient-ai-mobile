@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,11 +10,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Smartphone } from 'lucide-react';
+import { connectToLinktop, LinktopVitalsData } from '@/services/linktopBLEService';
 
 export const VitalSignsForm = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isConnectingDevice, setIsConnectingDevice] = useState(false);
 
   const form = useForm<VitalSignsFormData>({
     resolver: zodResolver(vitalSignsSchema),
@@ -46,7 +47,6 @@ export const VitalSignsForm = () => {
         temperature_celsius: data.temperature_celsius,
         respiratory_rate: data.respiratory_rate,
         notes: data.notes,
-        // timestamp and created_at will be set by default in DB
       });
 
       if (error) {
@@ -62,13 +62,63 @@ export const VitalSignsForm = () => {
     }
   };
 
+  const handleConnectDevice = async () => {
+    setIsConnectingDevice(true);
+    // Toast for starting connection is handled in connectToLinktop
+    const vitalsData = await connectToLinktop();
+    setIsConnectingDevice(false);
+
+    if (vitalsData) {
+      // toast.success("Vitals read from device!"); // Already toasted in service or upon specific reads
+      if (vitalsData.heartRate !== undefined) {
+        form.setValue('heart_rate', vitalsData.heartRate, { shouldValidate: true });
+      }
+      if (vitalsData.spo2 !== undefined) {
+        form.setValue('spo2', vitalsData.spo2, { shouldValidate: true });
+      }
+      if (vitalsData.temperature !== undefined) {
+        // Ensure temperature is a number and handle potential NaN or undefined from toFixed
+        const tempValue = parseFloat(vitalsData.temperature.toFixed(1));
+        if (!isNaN(tempValue)) {
+            form.setValue('temperature_celsius', tempValue, { shouldValidate: true });
+        }
+      }
+      // Blood pressure is not included in the Linktop example data from the user.
+      // If it were, it would be set here.
+
+      if (vitalsData.batteryLevel !== undefined) {
+          toast.info(`Linktop Device Battery: ${vitalsData.batteryLevel}%`);
+      }
+    } else {
+      // Specific error toasts are generally handled within connectToLinktop.
+      // A generic fallback toast here might be redundant unless connectToLinktop guarantees no toasts on failure.
+      // For now, assuming connectToLinktop handles its own error feedback.
+    }
+  };
+
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle>Log Your Vital Signs</CardTitle>
-        <CardDescription>Enter your latest readings below.</CardDescription>
+        <CardDescription>Enter your latest readings below, or connect a device.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-4">
+          <Button 
+            type="button" 
+            onClick={handleConnectDevice} 
+            className="w-full flex items-center justify-center gap-2"
+            variant="outline"
+            disabled={isConnectingDevice || isLoading}
+          >
+            {isConnectingDevice ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Smartphone size={20} className="mr-2 h-4 w-4" />
+            )}
+            {isConnectingDevice ? 'Connecting Device...' : 'Connect Linktop & Read Vitals'}
+          </Button>
+        </div>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -111,7 +161,7 @@ export const VitalSignsForm = () => {
             <Textarea id="notes" {...form.register('notes')} placeholder="Any additional notes..." />
             {form.formState.errors.notes && <p className="text-red-500 text-sm mt-1">{form.formState.errors.notes.message}</p>}
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading || isConnectingDevice}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Log Vitals
           </Button>
