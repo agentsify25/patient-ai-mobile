@@ -6,7 +6,7 @@ interface MeasurementCardProps {
   title: string;
   value: string;
   unit: string;
-  status: 'normal' | 'elevated' | 'critical';
+  status: 'normal' | 'elevated' | 'critical' | 'high' | 'low'; // Extended status types
   icon: React.ReactNode;
   timestamp?: string;
 }
@@ -15,7 +15,9 @@ export const MeasurementCard = ({ title, value, unit, status, icon, timestamp }:
   const statusColors = {
     normal: 'bg-green-500/20 text-green-400 border-green-500/30',
     elevated: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    critical: 'bg-red-500/20 text-red-400 border-red-500/30'
+    critical: 'bg-red-500/20 text-red-400 border-red-500/30',
+    high: 'bg-red-500/20 text-red-400 border-red-500/30', // Added 'high', same as critical for now
+    low: 'bg-blue-500/20 text-blue-400 border-blue-500/30'    // Added 'low' with blue styling
   };
 
   return (
@@ -25,7 +27,7 @@ export const MeasurementCard = ({ title, value, unit, status, icon, timestamp }:
           <div className="text-primary">{icon}</div>
           <span className="font-medium">{title}</span>
         </div>
-        <Badge className={statusColors[status]}>
+        <Badge className={statusColors[status] || statusColors.normal}> {/* Fallback to normal if status somehow not in map */}
           {status.toUpperCase()}
         </Badge>
       </div>
@@ -43,3 +45,4 @@ export const MeasurementCard = ({ title, value, unit, status, icon, timestamp }:
     </Card>
   );
 };
+
