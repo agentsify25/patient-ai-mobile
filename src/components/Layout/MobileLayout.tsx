@@ -19,12 +19,12 @@ export const MobileLayout = ({ children, title, headerLeft, headerRight }: Mobil
         <div className="flex items-center h-14 px-4">
           {headerLeft ? headerLeft : <HamburgerMenuButton />}
           {title ? (
-            <h1 className="text-lg font-semibold truncate text-center flex-grow mx-2 mt-1">{title}</h1> {/* Added mt-1 */}
+            <h1 className="text-lg font-semibold truncate text-center flex-grow mx-2 mt-1">{title}</h1>
           ) : (
             <div className="flex-grow" /> 
           )}
-          <div className="w-auto min-w-[40px] flex justify-end"> {/* Adjusted width to auto for flexibility */}
-            {headerRight ? headerRight : null /* Was <TopNavigation /> */}
+          <div className="w-auto min-w-[40px] flex justify-end"> 
+            {headerRight ? headerRight : null}
           </div>
         </div>
       </div>
@@ -35,4 +35,3 @@ export const MobileLayout = ({ children, title, headerLeft, headerRight }: Mobil
     </div>
   );
 };
-
