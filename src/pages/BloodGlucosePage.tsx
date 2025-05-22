@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 import { CircularProgressDisplay } from '@/components/Dashboard/CircularProgressDisplay';
 import { LinktopVitalsData } from '@/services/linktopBLEService';
 import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
-import { MobileLayout } from '@/components/Layout/MobileLayout'; // Ensure this import is present
 
 const BloodGlucosePage = () => {
   const [vitals, setVitals] = useState<LinktopVitalsData | null>(null);
@@ -16,7 +15,6 @@ const BloodGlucosePage = () => {
   const { headerLeft, headerRight } = DefaultPageHeaderElements();
 
   const handleStartTest = async () => {
-    // ... keep existing code (handleStartTest logic)
     setIsLoading(true);
     setVitals(null); 
     setGlucoseValue(null);
@@ -31,7 +29,6 @@ const BloodGlucosePage = () => {
       <div className="flex flex-col items-center justify-between p-4 min-h-[calc(100vh-3.5rem-5rem-2rem-3rem)]"> {/* Adjusted min-h */}
         <div className="flex-grow flex flex-col items-center justify-center w-full">
           {isLoading && !glucoseValue && (
-            // ... keep existing code (loading indicator)
             <div className="flex flex-col items-center justify-center py-8">
               <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />
               <p className="text-muted-foreground text-lg">Attempting to connect...</p>
@@ -39,7 +36,6 @@ const BloodGlucosePage = () => {
           )}
 
           {!isLoading && !glucoseValue && (
-            // ... keep existing code (initial CircularProgressDisplay)
             <CircularProgressDisplay
               value={null}
               maxValue={300} 
@@ -53,7 +49,6 @@ const BloodGlucosePage = () => {
           )}
           
           {glucoseValue !== null && (
-            // ... keep existing code (glucose CircularProgressDisplay)
             <CircularProgressDisplay
               value={glucoseValue}
               maxValue={300}
@@ -66,13 +61,11 @@ const BloodGlucosePage = () => {
             />
           )}
           
-          {/* ... keep existing code (press start message) */}
           {!isLoading && glucoseValue === null && (
              <p className="text-muted-foreground mt-8 text-center text-sm">Press START to measure blood glucose. (Feature upcoming)</p>
           )}
         </div>
 
-        {/* ... keep existing code (start button) */}
         <div className="w-full flex justify-center pt-6 mt-auto">
           <Button
             onClick={handleStartTest}

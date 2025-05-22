@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Card } from '@/components/ui/card';
@@ -6,16 +5,17 @@ import { Button } from '@/components/ui/button';
 import { ChevronRight, User, Settings as SettingsIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
 
 const SettingsPage = () => {
   const navigate = useNavigate();
+  const { headerLeft, headerRight } = DefaultPageHeaderElements();
 
   const handleProfileClick = () => {
     navigate('/profile');
   };
 
   const handleAppSettingsClick = () => {
-    // This can be expanded later to open a modal or navigate to a dedicated app settings page
     toast.info('App Settings clicked! This feature can be expanded here.');
     console.log('App Settings clicked from Settings page');
   };
@@ -33,11 +33,11 @@ const SettingsPage = () => {
       description: 'Manage application preferences',
       onClick: handleAppSettingsClick,
     },
-    // Add more settings items here in the future
   ];
 
   return (
-    <MobileLayout title="Settings">
+    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Settings</h1>
       <div className="space-y-4">
         {menuItems.map((item, index) => {
           const Icon = item.icon;

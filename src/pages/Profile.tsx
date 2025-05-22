@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { Button } from '@/components/ui/button';
@@ -17,6 +16,7 @@ import { ContactInformation } from '@/components/Profile/ContactInformation';
 import { HealthSummary } from '@/components/Profile/HealthSummary';
 import { ProfileSettingsMenu } from '@/components/Profile/ProfileSettingsMenu';
 import { EmergencyInformation } from '@/components/Profile/EmergencyInformation';
+import { DefaultPageHeaderElements } from '@/components/Layout/DefaultPageHeaderElements';
 
 interface ProfileData extends ProfileFormData {
   email?: string;
@@ -28,10 +28,11 @@ const Profile = () => {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const { headerLeft, headerRight } = DefaultPageHeaderElements();
 
   const profileForm = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { // It's good practice to set defaultValues
+    defaultValues: { 
       firstName: '',
       lastName: '',
       nationalId: '',
@@ -64,7 +65,7 @@ const Profile = () => {
               patientId: `PAT-${user.id.substring(0,8).toUpperCase()}`
             };
             setProfile(fetchedProfileData);
-            profileForm.reset({ // reset form with fetched data
+            profileForm.reset({ 
               firstName: fetchedProfileData.firstName,
               lastName: fetchedProfileData.lastName,
               nationalId: fetchedProfileData.nationalId,
@@ -80,7 +81,7 @@ const Profile = () => {
               patientId: `PAT-${user.id.substring(0,8).toUpperCase()}`
             };
             setProfile(initialProfileData);
-            profileForm.reset({ // reset form with initial data
+            profileForm.reset({ 
               firstName: initialProfileData.firstName,
               lastName: initialProfileData.lastName,
               nationalId: initialProfileData.nationalId,
@@ -99,7 +100,7 @@ const Profile = () => {
               patientId: `PAT-${user.id.substring(0,8).toUpperCase()}`
           };
           setProfile(defaultProfile);
-          profileForm.reset({ // reset form with default data on error
+          profileForm.reset({
             firstName: defaultProfile.firstName,
             lastName: defaultProfile.lastName,
             nationalId: defaultProfile.nationalId,
@@ -117,7 +118,7 @@ const Profile = () => {
         fetchProfile();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps 
-  }, [user, session]); // profileForm.reset was removed from deps to avoid re-fetch loops if reset causes re-renders
+  }, [user, session]);
 
   const onSubmit = async (data: ProfileFormData) => {
     if (!user) return;
@@ -147,7 +148,8 @@ const Profile = () => {
   
   if (isLoading) {
     return (
-      <MobileLayout title="Profile">
+      <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+        <h1 className="text-2xl font-semibold mb-6 text-center">Profile</h1>
         <div className="flex justify-center items-center h-64">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
@@ -157,7 +159,8 @@ const Profile = () => {
   
   if (!profile && !isLoading) {
      return (
-      <MobileLayout title="Profile">
+      <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+        <h1 className="text-2xl font-semibold mb-6 text-center">Profile</h1>
         <div className="text-center py-10">
           <p>Could not load profile data. Please try again later.</p>
           <Button onClick={signOut} variant="outline" className="mt-4">Sign Out</Button>
@@ -167,7 +170,8 @@ const Profile = () => {
   }
 
   return (
-    <MobileLayout title="Profile">
+    <MobileLayout headerLeft={headerLeft} headerRight={headerRight}>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Profile</h1>
       <form onSubmit={profileForm.handleSubmit(onSubmit)} className="space-y-6">
         <ProfileHeader 
           avatarUrl={profile?.avatarUrl}
@@ -199,4 +203,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
