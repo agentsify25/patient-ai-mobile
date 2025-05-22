@@ -29,7 +29,7 @@ export const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors ${ // Changed px-1 back to px-2
+              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors ${
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
@@ -37,7 +37,7 @@ export const BottomNavigation = () => {
               style={{ minWidth: '0' }} // Ensure button can shrink
             >
               <Icon size={20} />
-              <span className="text-xs font-medium text-center break-words">{item.label}</span>
+              <span className="text-xs font-medium text-center break-words w-full">{item.label}</span>
             </Button>
           );
         })}
@@ -45,3 +45,4 @@ export const BottomNavigation = () => {
     </div>
   );
 };
+
