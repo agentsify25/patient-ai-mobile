@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { MobileLayout } from '@/components/Layout/MobileLayout';
 import { HealthInsightCard } from '@/components/Health/HealthInsightCard';
@@ -139,7 +138,7 @@ const Index = () => {
               title="New Reading"
               icon={Plus}
               gradient="gradient-health"
-              onClick={() => navigate('/log-vitals')}
+              onClick={() => navigate('/select-test')} {/* Updated navigation path here */}
             />
             <QuickActionCard
               title="View Trends"
@@ -193,4 +192,3 @@ const Index = () => {
 };
 
 export default Index;
-
