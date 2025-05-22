@@ -1,14 +1,15 @@
 
 import React from 'react';
-import { Menu, User, Settings } from 'lucide-react';
+import { Menu, User, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
 import { useNavigate } from 'react-router-dom';
 
 export const HamburgerMenuButton = () => {
@@ -16,6 +17,7 @@ export const HamburgerMenuButton = () => {
 
   const handleAppSettingsClick = () => {
     console.log('App Settings clicked from menu');
+    // Potentially navigate('/app-settings') or open a modal
     alert('App Settings clicked! This feature is not yet implemented.');
   };
 
@@ -23,23 +25,39 @@ export const HamburgerMenuButton = () => {
     navigate('/profile');
   };
 
+  // Common style for menu items
+  const menuItemStyle = "flex items-center w-full p-3 text-left hover:bg-accent rounded-md text-sm";
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Sheet>
+      <SheetTrigger asChild>
         <Button variant="ghost" size="icon" aria-label="Open menu">
           <Menu size={24} />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        <DropdownMenuItem onClick={handleProfileClick}>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleAppSettingsClick}>
-          <Settings className="mr-2 h-4 w-4" />
-          <span>App Settings</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-[280px] sm:w-[320px] p-0">
+        <SheetHeader className="p-4 border-b">
+          <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
+           <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+            <X className="h-5 w-5" />
+            <span className="sr-only">Close</span>
+          </SheetClose>
+        </SheetHeader>
+        <div className="p-4 space-y-2">
+          <SheetClose asChild>
+            <button onClick={handleProfileClick} className={menuItemStyle}>
+              <User className="mr-3 h-5 w-5 text-primary" />
+              <span>Profile</span>
+            </button>
+          </SheetClose>
+          <SheetClose asChild>
+            <button onClick={handleAppSettingsClick} className={menuItemStyle}>
+              <Settings className="mr-3 h-5 w-5 text-primary" />
+              <span>App Settings</span>
+            </button>
+          </SheetClose>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 };
