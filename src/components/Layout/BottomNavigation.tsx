@@ -29,7 +29,7 @@ export const BottomNavigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors ${
+              className={`flex flex-col items-center justify-center gap-1 px-2 py-2 h-auto flex-1 transition-colors whitespace-normal ${ // Added whitespace-normal
                 isActive 
                   ? 'text-primary bg-primary/10' 
                   : 'text-muted-foreground hover:text-foreground'
