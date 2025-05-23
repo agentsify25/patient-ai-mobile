@@ -1,10 +1,9 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
-import Index from "./pages/Index";
+import Index from "./pages/Index"; // Index import remains, though not default home
 import Health from "./pages/Health";
 import Appointments from "./pages/Appointments";
 // import Messages from "./pages/Messages"; // Messages icon was replaced by Settings
@@ -59,13 +58,15 @@ const AppRoutes = () => {
   
   return (
     <Routes>
-      {/* If user has a session, show Index page at "/", otherwise show AuthPage at "/" */}
-      <Route path="/" element={session ? <Index /> : <AuthPage />} />
+      {/* If user has a session, show Health page at "/", otherwise show AuthPage at "/" */}
+      <Route path="/" element={session ? <Health /> : <AuthPage />} /> 
       
       {/* If user has a session and navigates to "/auth", redirect to "/", otherwise show AuthPage */}
-      <Route path="/auth" element={session ? <Navigate to="/" replace /> : <AuthPage />} />
+      {/* This redirect will now lead to Health page for authenticated users via the root route */}
+      <Route path="/auth" element={session ? <Navigate to="/" replace /> : <AuthPage />} /> 
       
       <Route element={<ProtectedRoute />}>
+        {/* The /health route still exists and is protected, ensuring direct navigation also works */}
         <Route path="/health" element={<Health />} />
         <Route path="/appointments" element={<Appointments />} />
         {/* <Route path="/messages" element={<Messages />} /> */}
@@ -83,6 +84,8 @@ const AppRoutes = () => {
         <Route path="/blood-glucose" element={<BloodGlucosePage />} />
         <Route path="/stethoscope" element={<StethoscopePage />} /> {/* New route */}
         <Route path="/otoscope" element={<OtoscopePage />} /> {/* New route */}
+        {/* The Index page is no longer explicitly routed here unless you add a specific path for it. */}
+        {/* For example, if you still want to access Index page, you could add: <Route path="/dashboard-overview" element={<Index />} /> */}
       </Route>
       
       <Route path="*" element={<NotFound />} />
