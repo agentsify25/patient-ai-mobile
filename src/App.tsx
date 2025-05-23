@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -58,7 +59,10 @@ const AppRoutes = () => {
   
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
+      {/* If user has a session, show Index page at "/", otherwise show AuthPage at "/" */}
+      <Route path="/" element={session ? <Index /> : <AuthPage />} />
+      
+      {/* If user has a session and navigates to "/auth", redirect to "/", otherwise show AuthPage */}
       <Route path="/auth" element={session ? <Navigate to="/" replace /> : <AuthPage />} />
       
       <Route element={<ProtectedRoute />}>
