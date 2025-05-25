@@ -58,6 +58,13 @@ export type Database = {
             referencedRelation: "patients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_active_devices_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
         ]
       }
       ai_flagged_alerts: {
@@ -106,6 +113,13 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "ai_flagged_alerts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_ai_flagged_alerts_patients"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
@@ -200,7 +214,68 @@ export type Database = {
             referencedRelation: "patients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_appointments_appointment_types"
+            columns: ["appointment_type_id"]
+            isOneToOne: false
+            referencedRelation: "appointment_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appointments_doctors"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appointments_hospitals"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_appointments_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      care_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_days: number | null
+          goals: string[] | null
+          id: string
+          interventions: string[] | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          goals?: string[] | null
+          id?: string
+          interventions?: string[] | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          goals?: string[] | null
+          id?: string
+          interventions?: string[] | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       chat_messages: {
         Row: {
@@ -236,6 +311,13 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "chat_messages_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_chat_messages_patients"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
@@ -286,6 +368,13 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "device_specifications_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_device_specifications_patients"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
@@ -350,6 +439,13 @@ export type Database = {
             referencedRelation: "hospitals"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_doctors_hospitals"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
         ]
       }
       escalation_logs: {
@@ -401,6 +497,20 @@ export type Database = {
             referencedRelation: "patients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_escalation_logs_ai_flagged_alerts"
+            columns: ["original_alert_id"]
+            isOneToOne: false
+            referencedRelation: "ai_flagged_alerts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_escalation_logs_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
         ]
       }
       hospitals: {
@@ -433,6 +543,211 @@ export type Database = {
         }
         Relationships: []
       }
+      manual_flags: {
+        Row: {
+          created_at: string
+          flagged_by_user_id: string | null
+          id: string
+          patient_identifier: string
+          reason: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          flagged_by_user_id?: string | null
+          id?: string
+          patient_identifier: string
+          reason: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          flagged_by_user_id?: string | null
+          id?: string
+          patient_identifier?: string
+          reason?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      medication_doses: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          patient_id: string
+          prescription_id: string
+          scheduled_time: string | null
+          self_reported: boolean
+          status: Database["public"]["Enums"]["medication_dose_status_enum"]
+          taken_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          patient_id: string
+          prescription_id: string
+          scheduled_time?: string | null
+          self_reported?: boolean
+          status?: Database["public"]["Enums"]["medication_dose_status_enum"]
+          taken_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          prescription_id?: string
+          scheduled_time?: string | null
+          self_reported?: boolean
+          status?: Database["public"]["Enums"]["medication_dose_status_enum"]
+          taken_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_medication_doses_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_medication_doses_prescriptions"
+            columns: ["prescription_id"]
+            isOneToOne: false
+            referencedRelation: "patient_prescriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medication_doses_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medication_doses_prescription_id_fkey"
+            columns: ["prescription_id"]
+            isOneToOne: false
+            referencedRelation: "patient_prescriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medications: {
+        Row: {
+          common_strengths: string[] | null
+          created_at: string
+          description: string | null
+          form: string | null
+          id: string
+          manufacturer: string | null
+          name: string
+          standard_dosage_unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          common_strengths?: string[] | null
+          created_at?: string
+          description?: string | null
+          form?: string | null
+          id?: string
+          manufacturer?: string | null
+          name: string
+          standard_dosage_unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          common_strengths?: string[] | null
+          created_at?: string
+          description?: string | null
+          form?: string | null
+          id?: string
+          manufacturer?: string | null
+          name?: string
+          standard_dosage_unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      patient_care_plans: {
+        Row: {
+          assigned_at: string
+          assigned_by_user_id: string | null
+          care_plan_id: string
+          created_at: string
+          end_date: string | null
+          id: string
+          notes: string | null
+          patient_id: string
+          start_date: string | null
+          status: Database["public"]["Enums"]["care_plan_status_enum"] | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by_user_id?: string | null
+          care_plan_id: string
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          patient_id: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["care_plan_status_enum"] | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by_user_id?: string | null
+          care_plan_id?: string
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["care_plan_status_enum"] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_patient_care_plans_care_plans"
+            columns: ["care_plan_id"]
+            isOneToOne: false
+            referencedRelation: "care_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_patient_care_plans_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_care_plans_care_plan_id_fkey"
+            columns: ["care_plan_id"]
+            isOneToOne: false
+            referencedRelation: "care_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_care_plans_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patient_diagnoses: {
         Row: {
           created_at: string
@@ -463,6 +778,27 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_patient_diagnoses_diagnosis_codes"
+            columns: ["diagnosis_code"]
+            isOneToOne: false
+            referencedRelation: "diagnosis_codes"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "fk_patient_diagnoses_doctors"
+            columns: ["diagnosed_by_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_patient_diagnoses_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "patient_diagnoses_diagnosed_by_doctor_id_fkey"
             columns: ["diagnosed_by_doctor_id"]
             isOneToOne: false
@@ -480,6 +816,60 @@ export type Database = {
             foreignKeyName: "patient_diagnoses_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_discharges: {
+        Row: {
+          created_at: string
+          destination: string | null
+          discharge_date: string
+          discharged_by_user_id: string | null
+          id: string
+          instructions: string | null
+          patient_id: string
+          reason: string | null
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          destination?: string | null
+          discharge_date: string
+          discharged_by_user_id?: string | null
+          id?: string
+          instructions?: string | null
+          patient_id: string
+          reason?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string | null
+          discharge_date?: string
+          discharged_by_user_id?: string | null
+          id?: string
+          instructions?: string | null
+          patient_id?: string
+          reason?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_patient_discharges_patients"
+            columns: ["patient_id"]
+            isOneToOne: true
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_discharges_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: true
             referencedRelation: "patients"
             referencedColumns: ["id"]
           },
@@ -505,6 +895,20 @@ export type Database = {
           role?: Database["public"]["Enums"]["assignment_role_type"] | null
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_patient_doctor_assignments_doctors"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_patient_doctor_assignments_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "patient_doctor_assignments_doctor_id_fkey"
             columns: ["doctor_id"]
@@ -557,10 +961,156 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_patient_documents_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "patient_documents_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_notes: {
+        Row: {
+          created_at: string
+          id: string
+          note_content: string
+          note_type: Database["public"]["Enums"]["note_category_enum"]
+          patient_id: string
+          recorded_by_name: string | null
+          recorded_by_user_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note_content: string
+          note_type?: Database["public"]["Enums"]["note_category_enum"]
+          patient_id: string
+          recorded_by_name?: string | null
+          recorded_by_user_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note_content?: string
+          note_type?: Database["public"]["Enums"]["note_category_enum"]
+          patient_id?: string
+          recorded_by_name?: string | null
+          recorded_by_user_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_patient"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_patient_notes_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_prescriptions: {
+        Row: {
+          created_at: string
+          dosage: string
+          end_date: string | null
+          frequency: string
+          id: string
+          instructions: string | null
+          is_active: boolean
+          medication_id: string
+          patient_id: string
+          prescribing_doctor_id: string | null
+          route: string | null
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dosage: string
+          end_date?: string | null
+          frequency: string
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          medication_id: string
+          patient_id: string
+          prescribing_doctor_id?: string | null
+          route?: string | null
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dosage?: string
+          end_date?: string | null
+          frequency?: string
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          medication_id?: string
+          patient_id?: string
+          prescribing_doctor_id?: string | null
+          route?: string | null
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_patient_prescriptions_doctors"
+            columns: ["prescribing_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_patient_prescriptions_medications"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_patient_prescriptions_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_prescriptions_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_prescriptions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_prescriptions_prescribing_doctor_id_fkey"
+            columns: ["prescribing_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
             referencedColumns: ["id"]
           },
         ]
@@ -598,24 +1148,31 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "patient_visits_locations_appointment_id_fkey"
+            foreignKeyName: "fk_patient_visits_locations_appointments"
             columns: ["appointment_id"]
             isOneToOne: false
             referencedRelation: "appointments"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "patient_visits_locations_hospital_id_fkey"
+            foreignKeyName: "fk_patient_visits_locations_hospitals"
             columns: ["hospital_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "patient_visits_locations_patient_id_fkey"
+            foreignKeyName: "fk_patient_visits_locations_patients"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "patient_visits_locations_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
             referencedColumns: ["id"]
           },
         ]
@@ -743,6 +1300,34 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_referrals_hospitals"
+            columns: ["referred_to_hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_referrals_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_referrals_referred_to_doctors"
+            columns: ["referred_to_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_referrals_referring_doctors"
+            columns: ["referring_doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "referrals_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
@@ -772,29 +1357,174 @@ export type Database = {
           },
         ]
       }
+      sla_timers: {
+        Row: {
+          alert_id: string
+          created_at: string
+          current_escalation_level: number
+          deadline_timestamp: string
+          id: string
+          initial_response_sla_minutes: number
+          notes: string | null
+          patient_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          alert_id: string
+          created_at?: string
+          current_escalation_level?: number
+          deadline_timestamp: string
+          id?: string
+          initial_response_sla_minutes: number
+          notes?: string | null
+          patient_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          alert_id?: string
+          created_at?: string
+          current_escalation_level?: number
+          deadline_timestamp?: string
+          id?: string
+          initial_response_sla_minutes?: number
+          notes?: string | null
+          patient_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_sla_timers_ai_flagged_alerts"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "ai_flagged_alerts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_sla_timers_patients"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sla_timers_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "ai_flagged_alerts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sla_timers_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teleconsultation_sessions: {
+        Row: {
+          callee_patient_id: string
+          callee_patient_name: string | null
+          caller_user_id: string | null
+          connected_at: string | null
+          created_at: string
+          duration_seconds: number | null
+          ended_at: string | null
+          id: string
+          initiated_at: string
+          session_status: Database["public"]["Enums"]["teleconsult_session_status"]
+          updated_at: string
+        }
+        Insert: {
+          callee_patient_id: string
+          callee_patient_name?: string | null
+          caller_user_id?: string | null
+          connected_at?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          initiated_at?: string
+          session_status?: Database["public"]["Enums"]["teleconsult_session_status"]
+          updated_at?: string
+        }
+        Update: {
+          callee_patient_id?: string
+          callee_patient_name?: string | null
+          caller_user_id?: string | null
+          connected_at?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          ended_at?: string | null
+          id?: string
+          initiated_at?: string
+          session_status?: Database["public"]["Enums"]["teleconsult_session_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_teleconsultation_sessions_callee_patients"
+            columns: ["callee_patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teleconsultation_sessions_callee_patient_id_fkey"
+            columns: ["callee_patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           assigned_at: string
+          created_at: string
           doctor_id_link: string | null
           patient_id_link: string | null
           role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
           user_id: string
         }
         Insert: {
           assigned_at?: string
+          created_at?: string
           doctor_id_link?: string | null
           patient_id_link?: string | null
           role: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
           user_id: string
         }
         Update: {
           assigned_at?: string
+          created_at?: string
           doctor_id_link?: string | null
           patient_id_link?: string | null
           role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "fk_user_roles_doctors"
+            columns: ["doctor_id_link"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_user_roles_patients"
+            columns: ["patient_id_link"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_roles_doctor_id_link_fkey"
             columns: ["doctor_id_link"]
@@ -856,6 +1586,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_vital_readings_profiles"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "vital_readings_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
@@ -885,6 +1622,10 @@ export type Database = {
           endorsements_count: number
         }[]
       }
+      is_health_professional_for_patient: {
+        Args: { p_patient_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       alert_severity_enum: "Low" | "Medium" | "High" | "Critical"
@@ -897,8 +1638,20 @@ export type Database = {
         | "High Blood Pressure"
         | "Low Blood Pressure"
         | "Unusual Activity Pattern"
-      app_role: "admin" | "doctor" | "nurse" | "coordinator" | "patient"
+      app_role:
+        | "admin"
+        | "doctor"
+        | "nurse"
+        | "coordinator"
+        | "patient"
+        | "Primary"
+        | "Specialist"
+        | "RPM"
+        | "technician"
+        | "casemanager"
+        | "supportstaff"
       assignment_role_type: "Primary" | "Specialist" | "RPM"
+      care_plan_status_enum: "Active" | "Completed" | "Cancelled"
       device_status_enum: "Online" | "Offline" | "Low Battery"
       device_type_enum:
         | "Smartwatch"
@@ -907,6 +1660,26 @@ export type Database = {
         | "Pulse Oximeter"
         | "Smart Scale"
       escalation_channel_enum: "SMS" | "Email" | "InAppNotification" | "Call"
+      medication_dose_status_enum:
+        | "Scheduled"
+        | "Taken"
+        | "Missed"
+        | "Skipped"
+        | "Unknown"
+      note_category_enum:
+        | "Clinical Note"
+        | "Intervention"
+        | "Medication Change"
+        | "General Update"
+        | "Follow-up"
+      teleconsult_session_status:
+        | "initiated"
+        | "connecting"
+        | "connected"
+        | "ended_by_caller"
+        | "ended_by_callee"
+        | "failed_to_connect"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1033,8 +1806,21 @@ export const Constants = {
         "Low Blood Pressure",
         "Unusual Activity Pattern",
       ],
-      app_role: ["admin", "doctor", "nurse", "coordinator", "patient"],
+      app_role: [
+        "admin",
+        "doctor",
+        "nurse",
+        "coordinator",
+        "patient",
+        "Primary",
+        "Specialist",
+        "RPM",
+        "technician",
+        "casemanager",
+        "supportstaff",
+      ],
       assignment_role_type: ["Primary", "Specialist", "RPM"],
+      care_plan_status_enum: ["Active", "Completed", "Cancelled"],
       device_status_enum: ["Online", "Offline", "Low Battery"],
       device_type_enum: [
         "Smartwatch",
@@ -1044,6 +1830,29 @@ export const Constants = {
         "Smart Scale",
       ],
       escalation_channel_enum: ["SMS", "Email", "InAppNotification", "Call"],
+      medication_dose_status_enum: [
+        "Scheduled",
+        "Taken",
+        "Missed",
+        "Skipped",
+        "Unknown",
+      ],
+      note_category_enum: [
+        "Clinical Note",
+        "Intervention",
+        "Medication Change",
+        "General Update",
+        "Follow-up",
+      ],
+      teleconsult_session_status: [
+        "initiated",
+        "connecting",
+        "connected",
+        "ended_by_caller",
+        "ended_by_callee",
+        "failed_to_connect",
+        "cancelled",
+      ],
     },
   },
 } as const
