@@ -1,4 +1,3 @@
-
 import { VitalReadingFromDB } from '@/types/vitalSigns';
 
 export const generateMockVitalHistory = (): VitalReadingFromDB[] => {

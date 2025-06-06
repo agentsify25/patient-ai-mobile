@@ -144,7 +144,7 @@ export const startDFU = async (deviceId: string): Promise<void> => {
   }
 };
 
-// Main connection function (for backward compatibility)
+// Main connection function for individual measurements
 export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
   try {
     toast.info('Connecting to Linktop device...');
@@ -152,28 +152,12 @@ export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
     // Start scan first
     await startScan();
     
-    // For now, simulate connecting to first found device
-    // In real implementation, you'd show a device selection UI
-    await connectToDevice('mock-device-id');
+    // For now, we need a real device selection UI
+    // This is a placeholder that will fail without a real device
+    throw new Error('Device selection UI not implemented. A real Linktop device must be selected.');
     
-    // Gather all measurements
-    const [bloodOxygen, heartRate, temperature] = await Promise.all([
-      measureBloodOxygen(),
-      measureHeartRate(),
-      measureTemperature()
-    ]);
-    
-    const vitalsData: LinktopVitalsData = {
-      spo2: bloodOxygen.spo2,
-      heartRate: heartRate.bpm,
-      temperature: temperature.temperature,
-      batteryLevel: 85 // Mock battery level
-    };
-    
-    toast.success('Successfully read vitals from Linktop device');
-    return vitalsData;
   } catch (error: any) {
     toast.error('Failed to connect to Linktop device', { description: error.message });
-    return null;
+    throw error;
   }
 };

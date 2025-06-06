@@ -4,52 +4,46 @@ import type { LinktopPlugin } from './definitions';
 
 export class LinktopWeb extends WebPlugin implements LinktopPlugin {
   async startScan(): Promise<void> {
-    console.log('Web platform: Linktop scan not supported');
+    throw new Error('Linktop device scanning is not supported on web platform');
   }
 
   async connectToDevice(options: { deviceId: string }): Promise<void> {
-    console.log('Web platform: Linktop connect not supported', options);
+    throw new Error('Linktop device connection is not supported on web platform');
   }
 
   async startBloodOxygenMeasurement(): Promise<{ spo2: number; bpm: number }> {
-    console.log('Web platform: Mock blood oxygen measurement');
-    return { spo2: 98, bpm: 75 };
+    throw new Error('Blood oxygen measurement requires a physical Linktop device');
   }
 
   async startBloodPressureMeasurement(): Promise<{ systolic: number; diastolic: number; hr: number }> {
-    console.log('Web platform: Mock blood pressure measurement');
-    return { systolic: 120, diastolic: 80, hr: 72 };
+    throw new Error('Blood pressure measurement requires a physical Linktop device');
   }
 
   async startTemperatureMeasurement(): Promise<{ temperature: number }> {
-    console.log('Web platform: Mock temperature measurement');
-    return { temperature: 36.7 };
+    throw new Error('Temperature measurement requires a physical Linktop device');
   }
 
   async startECGMeasurement(): Promise<{ ecg_data: number[] }> {
-    console.log('Web platform: Mock ECG measurement');
-    return { ecg_data: [] };
+    throw new Error('ECG measurement requires a physical Linktop device');
   }
 
   async startHeartRateMeasurement(): Promise<{ bpm: number }> {
-    console.log('Web platform: Mock heart rate measurement');
-    return { bpm: 78 };
+    throw new Error('Heart rate measurement requires a physical Linktop device');
   }
 
   async startBloodGlucoseMeasurement(): Promise<{ glucose: number }> {
-    console.log('Web platform: Mock blood glucose measurement');
-    return { glucose: 98 };
+    throw new Error('Blood glucose measurement requires a physical Linktop device');
   }
 
   async startStethoscope(): Promise<void> {
-    console.log('Web platform: Stethoscope not supported');
+    throw new Error('Stethoscope functionality requires a physical Linktop device');
   }
 
   async startOtoscope(): Promise<void> {
-    console.log('Web platform: Otoscope not supported');
+    throw new Error('Otoscope functionality requires a physical Linktop device');
   }
 
   async startDFU(options: { deviceId: string }): Promise<void> {
-    console.log('Web platform: DFU not supported', options);
+    throw new Error('Device firmware update requires a physical Linktop device');
   }
 }
