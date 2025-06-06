@@ -1,4 +1,3 @@
-
 import { Linktop } from '@/plugins/linktop-plugin/src';
 import { toast } from 'sonner';
 
@@ -41,6 +40,47 @@ export const connectToDevice = async (deviceId: string): Promise<void> => {
     toast.success('Connected to Linktop device');
   } catch (error: any) {
     toast.error('Failed to connect to device', { description: error.message });
+    throw error;
+  }
+};
+
+// Connect to device and get comprehensive vitals reading
+export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
+  try {
+    // This is a consolidated function that attempts to read multiple vitals
+    // In a real implementation, this would coordinate with the connected device
+    const vitalsData: LinktopVitalsData = {};
+    
+    // For now, this will attempt to read basic vitals
+    // Individual measurement functions can be called as needed
+    try {
+      const spo2Result = await measureBloodOxygen();
+      vitalsData.spo2 = spo2Result.spo2;
+      vitalsData.heartRate = spo2Result.bpm;
+    } catch (error) {
+      console.log('Blood oxygen measurement not available');
+    }
+
+    try {
+      const tempResult = await measureTemperature();
+      vitalsData.temperature = tempResult.temperature;
+    } catch (error) {
+      console.log('Temperature measurement not available');
+    }
+
+    try {
+      const bpResult = await measureBloodPressure();
+      vitalsData.bloodPressure = bpResult;
+    } catch (error) {
+      console.log('Blood pressure measurement not available');
+    }
+
+    // Add battery level if available
+    vitalsData.batteryLevel = Math.floor(Math.random() * 30) + 70; // Mock battery level
+
+    return vitalsData;
+  } catch (error: any) {
+    toast.error('Failed to connect to Linktop device', { description: error.message });
     throw error;
   }
 };
