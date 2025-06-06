@@ -143,21 +143,3 @@ export const startDFU = async (deviceId: string): Promise<void> => {
     throw error;
   }
 };
-
-// Main connection function for individual measurements
-export const connectToLinktop = async (): Promise<LinktopVitalsData | null> => {
-  try {
-    toast.info('Connecting to Linktop device...');
-    
-    // Start scan first
-    await startScan();
-    
-    // For now, we need a real device selection UI
-    // This is a placeholder that will fail without a real device
-    throw new Error('Device selection UI not implemented. A real Linktop device must be selected.');
-    
-  } catch (error: any) {
-    toast.error('Failed to connect to Linktop device', { description: error.message });
-    throw error;
-  }
-};
