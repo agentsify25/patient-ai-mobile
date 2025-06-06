@@ -16,31 +16,37 @@ public class LinktopPlugin extends Plugin {
 
     @PluginMethod
     public void startScan(PluginCall call) {
-        // TODO: Implement Linktop SDK scan
-        JSObject ret = new JSObject();
-        ret.put("devices", new String[]{});
-        call.resolve(ret);
+        // TODO: Start BLE/USB scan via Linktop SDK
+        call.resolve();
     }
 
     @PluginMethod
     public void connectToDevice(PluginCall call) {
         String deviceId = call.getString("deviceId");
-        // TODO: Implement Linktop SDK connection
+        // TODO: Connect to device by ID via Linktop SDK
         call.resolve();
     }
 
     @PluginMethod
     public void startBloodOxygenMeasurement(PluginCall call) {
-        // TODO: Implement Linktop SDK SpO2 measurement
+        // TODO: Call Linktop SDK's SPO2 function, return result
+        // Example:
+        // bleService?.startSpo2Test()
+        // bleService?.setOnSpo2Listener { spo2, bpm -> 
+        //     JSObject ret = new JSObject();
+        //     ret.put("spo2", spo2);
+        //     ret.put("bpm", bpm);
+        //     call.resolve(ret);
+        // }
         JSObject ret = new JSObject();
         ret.put("spo2", 98);
         ret.put("bpm", 75);
-        call.resolve(ret);
+        call.resolve(ret); // Mock for dev
     }
 
     @PluginMethod
     public void startBloodPressureMeasurement(PluginCall call) {
-        // TODO: Implement Linktop SDK BP measurement
+        // TODO: Call Linktop SDK's BP function
         JSObject ret = new JSObject();
         ret.put("systolic", 120);
         ret.put("diastolic", 80);
@@ -50,7 +56,7 @@ public class LinktopPlugin extends Plugin {
 
     @PluginMethod
     public void startTemperatureMeasurement(PluginCall call) {
-        // TODO: Implement Linktop SDK temperature measurement
+        // TODO: Call Linktop SDK's temperature function
         JSObject ret = new JSObject();
         ret.put("temperature", 36.7);
         call.resolve(ret);
@@ -58,7 +64,7 @@ public class LinktopPlugin extends Plugin {
 
     @PluginMethod
     public void startECGMeasurement(PluginCall call) {
-        // TODO: Implement Linktop SDK ECG measurement
+        // TODO: Call Linktop SDK's ECG function
         JSObject ret = new JSObject();
         ret.put("ecg_data", new double[]{});
         call.resolve(ret);
@@ -66,7 +72,7 @@ public class LinktopPlugin extends Plugin {
 
     @PluginMethod
     public void startHeartRateMeasurement(PluginCall call) {
-        // TODO: Implement Linktop SDK HR measurement
+        // TODO: Call Linktop SDK's HR function
         JSObject ret = new JSObject();
         ret.put("bpm", 78);
         call.resolve(ret);
@@ -74,7 +80,7 @@ public class LinktopPlugin extends Plugin {
 
     @PluginMethod
     public void startBloodGlucoseMeasurement(PluginCall call) {
-        // TODO: Implement Linktop SDK glucose measurement
+        // TODO: Call Linktop SDK's glucose function
         JSObject ret = new JSObject();
         ret.put("glucose", 98);
         call.resolve(ret);
@@ -82,20 +88,20 @@ public class LinktopPlugin extends Plugin {
 
     @PluginMethod
     public void startStethoscope(PluginCall call) {
-        // TODO: Implement Linktop SDK stethoscope
+        // TODO: Start stethoscope stream/recording via Linktop SDK
         call.resolve();
     }
 
     @PluginMethod
     public void startOtoscope(PluginCall call) {
-        // TODO: Implement Linktop SDK otoscope
+        // TODO: Start otoscope stream/recording via Linktop SDK
         call.resolve();
     }
 
     @PluginMethod
     public void startDFU(PluginCall call) {
         String deviceId = call.getString("deviceId");
-        // TODO: Implement Linktop SDK firmware update
+        // TODO: Start firmware update via Linktop SDK
         call.resolve();
     }
 }

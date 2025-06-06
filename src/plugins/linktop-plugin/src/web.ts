@@ -3,9 +3,8 @@ import { WebPlugin } from '@capacitor/core';
 import type { LinktopPlugin } from './definitions';
 
 export class LinktopWeb extends WebPlugin implements LinktopPlugin {
-  async startScan(): Promise<{ devices: string[] }> {
+  async startScan(): Promise<void> {
     console.log('Web platform: Linktop scan not supported');
-    return { devices: [] };
   }
 
   async connectToDevice(options: { deviceId: string }): Promise<void> {

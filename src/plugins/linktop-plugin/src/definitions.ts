@@ -1,6 +1,6 @@
 
 export interface LinktopPlugin {
-  startScan(): Promise<{ devices: string[] }>;
+  startScan(): Promise<void>;
   connectToDevice(options: { deviceId: string }): Promise<void>;
   startBloodOxygenMeasurement(): Promise<{ spo2: number; bpm: number }>;
   startBloodPressureMeasurement(): Promise<{ systolic: number; diastolic: number; hr: number }>;
